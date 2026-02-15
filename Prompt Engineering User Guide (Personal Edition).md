@@ -188,6 +188,78 @@
 請檢查是否存在推理漏洞與隱含假設。
 ```
 
+```json
+
+{
+  "prompt_template": {
+    "role": {
+      "description": "角色 Persona",
+      "instruction": "你是一位【角色 Persona】"
+    },
+    "task": {
+      "description": "任務",
+      "instruction": "請完成",
+      "items": [
+        "任務項目 1",
+        "任務項目 2"
+      ]
+    },
+    "context": {
+      "description": "情境",
+      "components": {
+        "background": {
+          "label": "背景",
+          "content": ""
+        },
+        "goal": {
+          "label": "目標",
+          "content": ""
+        },
+        "constraints": {
+          "label": "限制",
+          "content": "禁用簡體字"
+        },
+        "data": {
+          "label": "資料",
+          "content": ""
+        }
+      }
+    },
+    "format": {
+      "description": "格式",
+      "instruction": "請用【條列 / 表格 / Markdown】輸出",
+      "options": [
+        "條列",
+        "表格",
+        "Markdown"
+      ]
+    },
+    "depth": {
+      "description": "深度",
+      "instruction": "請用【第一性原理 / 系統思考 / 結構性分析】進行",
+      "methods": [
+        "第一性原理",
+        "系統思考",
+        "結構性分析"
+      ]
+    },
+    "decision": {
+      "description": "決策",
+      "instruction": "請提供可執行建議與優先順序"
+    },
+    "stress_test": {
+      "description": "壓力測試",
+      "instruction": "請指出可能盲點與反對觀點"
+    },
+    "self_check": {
+      "description": "自我檢查",
+      "instruction": "請檢查是否存在推理漏洞與隱含假設"
+    }
+  }
+}
+
+```
+
 ---
 
 # 五、極簡日常版（30 秒寫完）
