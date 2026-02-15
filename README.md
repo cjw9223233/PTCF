@@ -448,6 +448,77 @@ Format：
 
 👉 這是「決策型任務」。
 
+### JSON格式
+
+```json
+{
+  "prompt_template": {
+    "role": {
+      "description": "角色 Persona",
+      "instruction": "你是一位【角色 Persona】",
+      "content": ["資深架構師", "專案經理"]
+    },
+    "task": {
+      "description": "任務",
+      "instruction": "請完成",
+      "items": [
+        "提出版本控制升級方案",
+        "完成決策閉環（方案比較、風險評估、推薦與壓力測試）"
+      ]
+    },
+    "context": {
+      "description": "情境",
+      "components": {
+        "background": {
+          "label": "背景",
+          "content": "公司目前使用 SVN，團隊規模 30 人"
+        },
+        "goal": {
+          "label": "目標",
+          "content": "導入 Git 並支援 CI/CD"
+        },
+        "constraints": {
+          "label": "限制",
+          "content": "禁用簡體字；需兼顧學習成本、工具整合、版本遷移風險"
+        },
+        "data": {
+          "label": "資料",
+          "content": "現有 SVN 儲存庫、CI/CD 需求、團隊技術能力"
+        }
+      }
+    },
+    "format": {
+      "description": "格式",
+      "instruction": "請用【條列 / 表格 / Markdown】輸出",
+      "options": ["條列", "表格", "Markdown"]
+    },
+    "depth": {
+      "description": "深度",
+      "instruction": "請用【第一性原理 / 系統思考 / 結構性分析】進行",
+      "methods": ["第一性原理", "系統思考", "結構性分析"]
+    },
+    "decision": {
+      "description": "決策",
+      "instruction": ["請提供可執行建議與優先順序", "優缺點比較","風險評估", "推薦方案與理由", "實作優先順序"]
+    },
+    "stress_test": {
+      "description": "壓力測試",
+      "instruction": "請指出可能盲點與反對觀點",
+      "blind_spots": [
+        "團隊不熟 Git，可能導致分支混亂、合併衝突頻繁",
+        "遷移過程若缺乏驗證，可能造成歷史版本遺失",
+        "哪裡可能成為技術債？",
+        "最壞情境是什麼？"
+      ]
+    },
+    "self_check": {
+      "description": "自我檢查",
+      "instruction": "請檢查是否存在推理漏洞與隱含假設"
+    }
+  }
+}
+```
+
 ---
 
 ## 🟡 範例四：極簡任務（快速模式）
