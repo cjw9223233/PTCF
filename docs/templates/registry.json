@@ -44,13 +44,13 @@
       "id": "agent-task",
       "title": "Agent 任務模板",
       "file": "docs/templates/agent-task.md",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "status": "已發布",
       "owner": "本 repo 維護者",
       "levels": [1, 3],
-      "sla": ["可執行性", "格式合規", "假設透明度"],
+      "sla": ["可執行性", "格式合規", "假設透明度", "安全與隱私"],
       "evals": "evals/agent-task/cases.json",
-      "verified": { "date": "2026-11", "models": [], "method": "以實例人工檢查輸出結構；尚未以模型實跑測試案例" },
+      "verified": { "date": "2026-11", "models": [], "method": "新增自主程度、驗證指令、權限、停止條件與四個子模板；以實例人工檢查輸出結構；尚未以模型實跑測試案例" },
       "replaced_by": null
     },
     {
