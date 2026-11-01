@@ -26,6 +26,7 @@ Core formula: **有效輸出 = Persona × Task × Context × Format** (PTCF). Th
 | `docs/04-template-system.md` | Level 4: template library index, Output SLA |
 | `docs/05`–`08` | Modern practices, agent/context engineering, evaluation (Metrics Layer), AI dev workflow |
 | `docs/templates/` | Copy-ready templates (general, programming, investment) + `prompt-template.json` |
+| `tutorial/index.html` | Self-contained interactive tutorial (inline CSS/JS, no front matter, so Jekyll copies it as-is). Lessons summarize docs 01–07; includes a level quiz and a prompt builder |
 
 Conventions:
 
@@ -33,5 +34,6 @@ Conventions:
 - `docs/templates/prompt-template.json` is the single source for the JSON schema (`version`, `role`, `task.items`, `context.{background,goal,constraints,data}`, `format.{type,length}`, `depth`, `reasoning_mode`, `decision.items`, `stress_test.questions`, `self_check.items`). Every JSON example in Markdown must use the same keys, and Markdown template sections must map one-to-one to them.
 - Data inside prompts is wrapped in XML-style tags (`<document>`, `<code>`, `<examples>`), not `<<< >>>`.
 - Docs end with a prev / home / next navigation line; keep it in sync when adding or reordering docs.
+- The tutorial page restates docs content; when a doc's concepts or examples change, update the matching lesson in `tutorial/index.html`. Its builder (`buildJSON`) must emit only keys from `prompt-template.json`. Links from the tutorial to docs use `../docs/<name>.html` (Jekyll's output names), and links into it use `tutorial/`.
 - Investment content stays illustrative: keep the disclaimer and use fictional examples, not real tickers or figures.
 - Record notable changes in `CHANGELOG.md`.

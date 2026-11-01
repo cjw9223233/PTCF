@@ -14,6 +14,7 @@ Level 1–3 解決「單次 prompt 寫得好」；Level 4 解決「每次都寫�
 | 技術設計 | [程式與專案模板](templates/programming.md) | 專案掃描、架構設計、重構、技術選型 |
 | 商業決策 | [投資分析模板](templates/investment.md) | 個股或產業分析（寫法示範） |
 | 結構化 | [prompt-template.json](templates/prompt-template.json) | 存檔、表單化、串接自動化工具 |
+| 互動 | [Prompt 產生器](../tutorial/) | 選層級、填欄位，即時產生 Markdown prompt 與 JSON |
 
 **建議再自行擴充的模板類型**
 
