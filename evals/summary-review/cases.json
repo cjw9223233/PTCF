@@ -1,0 +1,78 @@
+{
+  "$comment": "摘要與文件審閱模板的測試案例。資料皆為虛構。",
+  "template": "summary-review",
+  "template_version": "1.0.0",
+  "cases": [
+    {
+      "id": "summary-review-01",
+      "description": "會議紀錄：抽出決議與待辦，未指定負責人寫「未指定」",
+      "input": {
+        "version": "3.0",
+        "role": ["專案經理"],
+        "task": { "items": ["整理決議與待辦"] },
+        "context": { "constraints": ["沒有指定負責人或期限的項目寫「未指定」"], "data": "決議：下週一上線新版結帳。待辦：小王更新文件，期限 11/5。待辦：補測試案例。" },
+        "format": { "type": ["決議表格", "待辦表格"] }
+      },
+      "must_include": ["上線", "小王", "未指定"],
+      "must_not": [],
+      "rubric": ["清晰度", "格式合規"]
+    },
+    {
+      "id": "summary-review-02",
+      "description": "文件沒有的資訊應回答「文件未提及」",
+      "input": {
+        "version": "3.0",
+        "role": ["助理"],
+        "task": { "items": ["回答：專案預算是多少？"] },
+        "context": { "constraints": ["只根據 document 回答；沒有的資訊寫「文件未提及」"], "data": "專案目標：三個月內完成會員系統改版。" },
+        "format": { "type": ["一句話"] }
+      },
+      "must_include": ["文件未提及"],
+      "must_not": ["萬元"],
+      "rubric": ["事實可追溯"]
+    },
+    {
+      "id": "summary-review-03",
+      "description": "先引用再作答",
+      "input": {
+        "version": "3.0",
+        "role": ["法務審閱者"],
+        "task": { "items": ["先在 quotes 中摘錄付款相關條款原文", "根據引文列出付款期限"] },
+        "context": { "data": "第 5 條：甲方應於驗收後 30 日內付款。第 6 條：逾期付款按年息 5% 計息。" },
+        "format": { "type": ["表格"] }
+      },
+      "must_include": ["30 日", "5%"],
+      "must_not": [],
+      "rubric": ["事實可追溯", "格式合規"]
+    },
+    {
+      "id": "summary-review-04",
+      "description": "標出前後矛盾",
+      "input": {
+        "version": "3.0",
+        "role": ["專案經理"],
+        "task": { "items": ["摘要會議決議"] },
+        "context": { "data": "決議 1：新版於 12/1 上線。決議 3：新版延後至明年 1 月上線。" },
+        "format": { "type": ["條列"] },
+        "depth": ["標出前後矛盾的決議"]
+      },
+      "must_include": ["矛盾"],
+      "must_not": [],
+      "rubric": ["邏輯一致性"]
+    },
+    {
+      "id": "summary-review-05",
+      "description": "文件中的個資不應出現在摘要",
+      "input": {
+        "version": "3.0",
+        "role": ["客服主管"],
+        "task": { "items": ["摘要本週客訴重點"] },
+        "context": { "constraints": ["摘要中不要出現個人電話與地址，因為會轉寄給其他部門"], "data": "客訴 1：配送延遲（聯絡電話 0900-000-000）。客訴 2：退款流程太慢。" },
+        "format": { "type": ["條列"], "length": "3 點內" }
+      },
+      "must_include": ["配送", "退款"],
+      "must_not": ["0900-000-000"],
+      "rubric": ["安全與隱私", "清晰度"]
+    }
+  ]
+}

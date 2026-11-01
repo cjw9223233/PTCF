@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## v3.2（2026-11）
+
+- Level 4 新增「架構：Prompt as Code」：模板中繼資料改以 `docs/templates/registry.json` 為唯一來源，模板卡需與其一致。
+- 新增 `prompt-template.schema.json`（JSON Schema 2020-12）；`prompt-template.json` 以 `$schema` 引用。
+- 新增 `evals/<id>/cases.json`：五個模板各 5 個測試案例，含 prompt injection 案例。
+- 新增 `scripts/validate.py` 與 `validate` workflow：檢查連結、JSON、registry、模板卡、測試案例與內容慣例。
+- 撰寫規範新增防範 prompt injection、共用片段、prompt caching 結構；生命週期新增跨模型可攜性；發布新增可觀測性。
+- 萬用模板新增「共用片段」（版本 3.1.0）；07 說明測試案例檔格式；教學 Lesson 4 新增「自動驗證」卡片。
+
 ## v3.1（2026-11）
 
 - [Level 4](docs/04-template-system.md) 改寫為模板營運手冊：模板卡（中繼資料）、撰寫規範（`【變數】`、XML 標籤、限制附理由）、生命週期與重新驗證時機、發布到工具（Prompt as Code）、團隊治理。

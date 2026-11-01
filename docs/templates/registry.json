@@ -1,0 +1,70 @@
+{
+  "$comment": "模板中繼資料的唯一來源。各模板 Markdown 開頭的模板卡是給人看的檢視，版本與狀態必須與此一致（由 scripts/validate.py 檢查）。status：草稿／審查中／已發布／已停用。",
+  "templates": [
+    {
+      "id": "general",
+      "title": "萬用模板",
+      "file": "docs/templates/general.md",
+      "version": "3.1.0",
+      "status": "已發布",
+      "owner": "本 repo 維護者",
+      "levels": [1, 2, 3],
+      "sla": ["清晰度", "邏輯一致性", "可執行性", "風險揭露", "假設透明度"],
+      "evals": "evals/general/cases.json",
+      "verified": { "date": "2026-11", "models": [], "method": "以實例人工檢查輸出結構；尚未以模型實跑測試案例" },
+      "replaced_by": null
+    },
+    {
+      "id": "programming",
+      "title": "程式與專案模板",
+      "file": "docs/templates/programming.md",
+      "version": "3.0.0",
+      "status": "已發布",
+      "owner": "本 repo 維護者",
+      "levels": [1, 2, 3],
+      "sla": ["邏輯一致性", "可執行性", "風險揭露"],
+      "evals": "evals/programming/cases.json",
+      "verified": { "date": "2026-11", "models": [], "method": "以重構實例人工檢查輸出結構；尚未以模型實跑測試案例" },
+      "replaced_by": null
+    },
+    {
+      "id": "investment",
+      "title": "投資分析模板",
+      "file": "docs/templates/investment.md",
+      "version": "3.0.0",
+      "status": "已發布",
+      "owner": "本 repo 維護者",
+      "levels": [1, 2, 3],
+      "sla": ["事實可追溯", "風險揭露", "假設透明度"],
+      "evals": "evals/investment/cases.json",
+      "verified": { "date": "2026-11", "models": [], "method": "以虛構實例人工檢查輸出結構；尚未以模型實跑測試案例" },
+      "replaced_by": null
+    },
+    {
+      "id": "agent-task",
+      "title": "Agent 任務模板",
+      "file": "docs/templates/agent-task.md",
+      "version": "1.0.0",
+      "status": "已發布",
+      "owner": "本 repo 維護者",
+      "levels": [1, 3],
+      "sla": ["可執行性", "格式合規", "假設透明度"],
+      "evals": "evals/agent-task/cases.json",
+      "verified": { "date": "2026-11", "models": [], "method": "以實例人工檢查輸出結構；尚未以模型實跑測試案例" },
+      "replaced_by": null
+    },
+    {
+      "id": "summary-review",
+      "title": "摘要與文件審閱模板",
+      "file": "docs/templates/summary-review.md",
+      "version": "1.0.0",
+      "status": "已發布",
+      "owner": "本 repo 維護者",
+      "levels": [1, 2],
+      "sla": ["清晰度", "事實可追溯", "格式合規"],
+      "evals": "evals/summary-review/cases.json",
+      "verified": { "date": "2026-11", "models": [], "method": "以實例人工檢查輸出結構；尚未以模型實跑測試案例" },
+      "replaced_by": null
+    }
+  ]
+}

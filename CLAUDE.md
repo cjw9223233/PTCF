@@ -38,3 +38,10 @@ Conventions:
 - The tutorial page restates docs content; when a doc's concepts or examples change, update the matching lesson in `tutorial/index.html`. Its builder (`buildJSON`) must emit only keys from `prompt-template.json`. Links from the tutorial to docs use `../docs/<name>.html` (Jekyll's output names), and links into it use `tutorial/`.
 - Investment content stays illustrative: keep the disclaimer and use fictional examples, not real tickers or figures.
 - Record notable changes in `CHANGELOG.md`.
+
+## Templates and validation
+
+- `docs/templates/registry.json` is the single source of template metadata (version, status, evals). Each template's 模板卡 must show the same 版本 and 狀態.
+- A template with status 已發布 needs `evals/<id>/cases.json` with at least 5 cases, `template_version` equal to the registry version, and each case `input` valid against `prompt-template.schema.json`.
+- Adding a template touches: the `docs/templates/<id>.md` file with its card, a registry entry, `evals/<id>/cases.json`, the README template list, the table in `docs/04-template-system.md` section 1, and the tutorial's 延伸閱讀.
+- Run checks with `pip install jsonschema` then `python scripts/validate.py`; the `validate` workflow runs it on every push and PR. Every ```json block in Markdown is validated against the schema, so use ```text for non-prompt JSON-like examples.
