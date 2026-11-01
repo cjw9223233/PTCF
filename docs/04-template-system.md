@@ -13,7 +13,7 @@ Level 1–3 解決「單次 prompt 寫得好」；Level 4 解決「每次都寫�
 | [萬用模板](templates/general.md) | 1–3 | 任何任務；含極簡版、完整版、JSON 版 |
 | [程式與專案模板](templates/programming.md) | 1–3 | 共同骨架＋六個子模板：專案掃描、除錯、程式碼審查、重構、架構與技術選型、寫測試 |
 | [投資分析模板](templates/investment.md) | 1–3 | 分析類 prompt 寫法示範（非投資建議） |
-| [Agent 任務模板](templates/agent-task.md) | 1、3 | 交給 AI 代理執行的開發或自動化任務 |
+| [Agent 任務模板](templates/agent-task.md) | 1、3 | 交給 AI 代理執行的開發或自動化任務：自主程度、驗證指令、權限、停止條件；子模板含修 bug、新功能、重構、相依套件升級 |
 | [摘要與文件審閱模板](templates/summary-review.md) | 1–2 | 會議紀錄、報告、合約等長文件的摘要與審閱 |
 | [prompt-template.json](templates/prompt-template.json) | 全部 | 統一 JSON 結構；存檔、表單化、串接自動化 |
 | [Prompt 產生器](../tutorial/) | 1–3 | 選層級、填欄位，即時產生 Markdown 與 JSON |
