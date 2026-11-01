@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## v3.2（2026-11）
+
+- Level 4 新增「架構：Prompt as Code」：模板中繼資料改以 `docs/templates/registry.json` 為唯一來源，模板卡需與其一致。
+- 新增 `prompt-template.schema.json`（JSON Schema 2020-12）；`prompt-template.json` 以 `$schema` 引用。
+- 新增 `evals/<id>/cases.json`：五個模板各 5 個測試案例，含 prompt injection 案例。
+- 新增 `scripts/validate.py` 與 `validate` workflow：檢查連結、JSON、registry、模板卡、測試案例與內容慣例。
+- 撰寫規範新增防範 prompt injection、共用片段、prompt caching 結構；生命週期新增跨模型可攜性；發布新增可觀測性。
+- 程式與專案模板升至 4.0.0：改為共同骨架＋六個子模板（專案掃描、除錯、程式碼審查、重構、架構與技術選型、寫測試）；新增對話與代理的分工表、貼上程式碼前的機密檢查、不能改的範圍、驗收要求與 diff 輸出；實例改用 #private；測試案例擴充為 8 個，含除錯、審查、機密與行為不變案例。
+- 萬用模板新增「共用片段」（版本 3.1.0）；07 說明測試案例檔格式；教學 Lesson 4 新增「自動驗證」卡片。
+
+## v3.1（2026-11）
+
+- [Level 4](docs/04-template-system.md) 改寫為模板營運手冊：模板卡（中繼資料）、撰寫規範（`【變數】`、XML 標籤、限制附理由）、生命週期與重新驗證時機、發布到工具（Prompt as Code）、團隊治理。
+- Output SLA 新增事實可追溯、格式合規、安全與隱私三個面向，並為每個面向標註建議量測方式。
+- 新增 [Agent 任務模板](docs/templates/agent-task.md) 與 [摘要與文件審閱模板](docs/templates/summary-review.md)；既有三個模板加上模板卡。
+- 選層對照表統一放在 README，Level 4 改為連結。
+- 教學頁 Lesson 4 同步新增 SLA 面向與模板營運重點。
+
 ## v3.0.1（2026-11）
 
 - 互動教學頁 UX 優化：閱讀進度條、課程完成追蹤與「前往下一課」、續讀入口、主題切換、程式碼複製按鈕、決策步驟可跳轉與全部展開、測驗作答進度與複習建議、產生器的復原提示與下載 .md／.json、手機版「查看輸出」按鈕；補強鍵盤操作、跳到主要內容連結與減少動態效果支援。

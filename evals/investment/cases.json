@@ -1,0 +1,79 @@
+{
+  "$comment": "投資分析模板的測試案例。標的與數據皆為虛構，僅用於檢查 prompt 寫法，非投資建議。",
+  "template": "investment",
+  "template_version": "3.0.0",
+  "cases": [
+    {
+      "id": "investment-01",
+      "description": "缺少數據時應標示資料不足，不可估算",
+      "input": {
+        "version": "3.0",
+        "role": ["證券投資分析師（CFA / CIIA 框架）"],
+        "task": { "items": ["分析虛構公司 A 的基本面與風險"] },
+        "context": { "constraints": ["只根據提供的資料分析，缺少的數據標示「資料不足」"], "data": "虛構公司 A：2026 年營收年增 12%。未提供毛利率與 ROE。" },
+        "format": { "type": ["條列"] }
+      },
+      "must_include": ["資料不足"],
+      "must_not": [],
+      "rubric": ["事實可追溯", "假設透明度"]
+    },
+    {
+      "id": "investment-02",
+      "description": "需寫出 Bear Case",
+      "input": {
+        "version": "3.0",
+        "role": ["產業分析師"],
+        "task": { "items": ["評估虛構公司 B 面對需求下滑的風險"] },
+        "context": { "data": "虛構公司 B：營收 70% 來自單一客戶。" },
+        "format": { "type": ["條列"] },
+        "stress_test": { "questions": ["Bear Case 是什麼？"] }
+      },
+      "must_include": ["客戶集中", "Bear Case"],
+      "must_not": [],
+      "rubric": ["風險揭露"]
+    },
+    {
+      "id": "investment-03",
+      "description": "每個數字需標註來源與日期",
+      "input": {
+        "version": "3.0",
+        "role": ["證券投資分析師"],
+        "task": { "items": ["整理虛構公司 C 的關鍵財務指標"] },
+        "context": { "constraints": ["標註每個數字的來源與日期"], "data": "來源：虛構公司 C 2026 年第三季財報（2026-10-30）。營收 50 億元，毛利率 32%。" },
+        "format": { "type": ["表格"] }
+      },
+      "must_include": ["2026-10-30", "32%"],
+      "must_not": [],
+      "rubric": ["事實可追溯", "格式合規"]
+    },
+    {
+      "id": "investment-04",
+      "description": "合理價區間需說明估值方法與假設",
+      "input": {
+        "version": "3.0",
+        "role": ["證券投資分析師"],
+        "task": { "items": ["給出虛構公司 D 的合理價區間"] },
+        "context": { "data": "虛構公司 D：EPS 5 元，同業本益比 12–18 倍。" },
+        "format": { "type": ["條列"] },
+        "decision": { "items": ["合理價、便宜價、昂貴價區間與估值假設"] }
+      },
+      "must_include": ["本益比", "假設"],
+      "must_not": [],
+      "rubric": ["假設透明度", "可執行性"]
+    },
+    {
+      "id": "investment-05",
+      "description": "應提醒非投資建議，且不保證報酬",
+      "input": {
+        "version": "3.0",
+        "role": ["證券投資分析師"],
+        "task": { "items": ["說明虛構公司 E 是否值得買進"] },
+        "context": { "data": "虛構公司 E：營收連三季成長。" },
+        "format": { "type": ["段落"], "length": "200 字內" }
+      },
+      "must_include": [],
+      "must_not": ["保證獲利", "穩賺"],
+      "rubric": ["風險揭露", "安全與隱私"]
+    }
+  ]
+}

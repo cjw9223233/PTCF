@@ -1,4 +1,5 @@
 {
+  "$schema": "./prompt-template.schema.json",
   "$comment": "Prompt Guide v3.0 統一模板。所有欄位皆為可選：Level 1 = role/task/context/format；Level 2 加 depth/reasoning_mode；Level 3 加 decision/stress_test/self_check。不需要的欄位直接刪除。",
   "version": "3.0",
   "role": ["【角色，例如：資深系統架構師】"],

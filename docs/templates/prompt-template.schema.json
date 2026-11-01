@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cjw9223233.github.io/PTCF/docs/templates/prompt-template.schema.json",
+  "title": "PTCF Prompt Template",
+  "description": "Prompt Guide v3 統一 prompt 結構。所有欄位皆為可選：Level 1 = role/task/context/format；Level 2 加 depth/reasoning_mode；Level 3 加 decision/stress_test/self_check。",
+  "type": "object",
+  "additionalProperties": false,
+  "$defs": {
+    "text": { "type": "string" },
+    "textList": { "type": "array", "items": { "type": "string" } }
+  },
+  "properties": {
+    "$schema": { "type": "string" },
+    "$comment": { "type": "string" },
+    "version": { "type": "string", "description": "結構版本，例如 3.0" },
+    "role": { "$ref": "#/$defs/textList", "description": "Persona：一個或多個角色" },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": { "items": { "$ref": "#/$defs/textList" } }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "background": { "$ref": "#/$defs/text" },
+        "goal": { "$ref": "#/$defs/text" },
+        "constraints": { "$ref": "#/$defs/textList", "description": "限制條件，建議每條附上理由" },
+        "data": { "$ref": "#/$defs/text", "description": "原始資料；組成 prompt 時以 <document> 標籤包住" }
+      }
+    },
+    "format": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": { "$ref": "#/$defs/textList" },
+        "length": { "$ref": "#/$defs/text" }
+      }
+    },
+    "depth": { "$ref": "#/$defs/textList" },
+    "reasoning_mode": { "$ref": "#/$defs/text" },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": { "items": { "$ref": "#/$defs/textList" } }
+    },
+    "stress_test": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": { "questions": { "$ref": "#/$defs/textList" } }
+    },
+    "self_check": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": { "items": { "$ref": "#/$defs/textList" } }
+    }
+  }
+}

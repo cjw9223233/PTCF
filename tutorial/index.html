@@ -502,7 +502,7 @@ Format：
   <section class="lesson" id="l4">
     <div class="eyebrow" style="color: var(--l4)">Lesson 4<span class="time">約 4 分鐘</span></div>
     <h2>模板與評估：讓好 prompt 可以重複</h2>
-    <p>先定義「什麼叫做好」，才能驗收輸出、比較 prompt 版本。Output SLA 的五個面向可以直接當評分表：</p>
+    <p>先定義「什麼叫做好」，才能驗收輸出、比較 prompt 版本。Output SLA 的五個核心面向可以直接當評分表：</p>
 
     <div class="table-wrap"><table>
       <thead><tr><th>面向</th><th>1 分</th><th>3 分</th><th>5 分</th></tr></thead>
@@ -514,6 +514,15 @@ Format：
         <tr><td><strong>假設透明度</strong></td><td>沒說明假設</td><td>部分假設有說明</td><td>明列假設與資料時間點</td></tr>
       </tbody>
     </table></div>
+    <p>自動化流程另外加上三個面向：<strong>事實可追溯</strong>（主張附來源與日期）、<strong>格式合規</strong>（JSON 能解析、長度符合，可用規則自動檢查）、<strong>安全與隱私</strong>（不洩漏個資或機密）。每個模板挑 3–5 個最重要的面向即可。</p>
+
+    <h3>模板也需要營運</h3>
+    <div class="grid">
+      <div class="card"><h4>模板卡</h4><p>版本、負責人、適用層級、驗證過的模型與日期。</p></div>
+      <div class="card"><h4>生命週期</h4><p>草稿 → 審查 → 發布 → 停用；模型升級時重跑測試案例。</p></div>
+      <div class="card"><h4>放進工具</h4><p>專案說明檔、Skills、slash command、共享助理；只維護一份來源。</p></div>
+      <div class="card"><h4>自動驗證</h4><p>registry 記錄版本與狀態，CI 檢查 schema、連結與測試案例，不通過就不能合併。</p></div>
+    </div>
 
     <h3>評估流程</h3>
 <pre>定義成功標準 → 準備 5–20 個測試案例 → 跑出輸出 → 評分 → 一次只改一個變因 → 重跑比較</pre>
@@ -646,8 +655,10 @@ Format：
       <a class="card" href="../docs/07-evaluation-iteration.html"><h4>評估與迭代</h4><p>測試案例、評分表、版本比較</p></a>
       <a class="card" href="../docs/08-ai-dev-workflow.html"><h4>與 AI 協作開發流程</h4><p>從想法到 PR 的護欄清單</p></a>
       <a class="card" href="../docs/templates/general.html"><h4>萬用模板</h4><p>極簡版、完整版、JSON 版</p></a>
-      <a class="card" href="../docs/templates/programming.html"><h4>程式與專案模板</h4><p>專案掃描、架構設計、重構</p></a>
+      <a class="card" href="../docs/templates/programming.html"><h4>程式與專案模板</h4><p>掃描、除錯、審查、重構、架構、測試</p></a>
       <a class="card" href="../docs/templates/investment.html"><h4>投資分析模板</h4><p>分析類 prompt 寫法示範</p></a>
+      <a class="card" href="../docs/templates/agent-task.html"><h4>Agent 任務模板</h4><p>交給 AI 代理的開發與自動化任務</p></a>
+      <a class="card" href="../docs/templates/summary-review.html"><h4>摘要與文件審閱模板</h4><p>會議紀錄、報告等長文件</p></a>
     </div>
     <footer>Prompt Guide v3.0 ・ <a href="https://github.com/cjw9223233/PTCF">GitHub repo</a></footer>
   </section>

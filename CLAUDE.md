@@ -32,8 +32,16 @@ Conventions:
 
 - Canonical module names: Persona, Task, Context, Format, Depth, Reasoning Mode, Constraint, Decision, Stress Test, Self-check. When renaming a concept, update README, all `docs/` and `CHANGELOG.md`.
 - `docs/templates/prompt-template.json` is the single source for the JSON schema (`version`, `role`, `task.items`, `context.{background,goal,constraints,data}`, `format.{type,length}`, `depth`, `reasoning_mode`, `decision.items`, `stress_test.questions`, `self_check.items`). Every JSON example in Markdown must use the same keys, and Markdown template sections must map one-to-one to them.
+- Every template in `docs/templates/` starts with a 模板卡 table (版本, 狀態, 負責人, 適用層級, 適用／不適用, 驗證紀錄, SLA 面向) as defined in `docs/04-template-system.md`; bump its version and 驗證紀錄 when changing the template. Placeholders use `【變數名】` (mark optional ones「（選填）」), never double braces.
 - Data inside prompts is wrapped in XML-style tags (`<document>`, `<code>`, `<examples>`), not `<<< >>>`.
 - Docs end with a prev / home / next navigation line; keep it in sync when adding or reordering docs.
 - The tutorial page restates docs content; when a doc's concepts or examples change, update the matching lesson in `tutorial/index.html`. Its builder (`buildJSON`) must emit only keys from `prompt-template.json`. Links from the tutorial to docs use `../docs/<name>.html` (Jekyll's output names), and links into it use `tutorial/`.
 - Investment content stays illustrative: keep the disclaimer and use fictional examples, not real tickers or figures.
 - Record notable changes in `CHANGELOG.md`.
+
+## Templates and validation
+
+- `docs/templates/registry.json` is the single source of template metadata (version, status, evals). Each template's 模板卡 must show the same 版本 and 狀態.
+- A template with status 已發布 needs `evals/<id>/cases.json` with at least 5 cases, `template_version` equal to the registry version, and each case `input` valid against `prompt-template.schema.json`.
+- Adding a template touches: the `docs/templates/<id>.md` file with its card, a registry entry, `evals/<id>/cases.json`, the README template list, the table in `docs/04-template-system.md` section 1, and the tutorial's 延伸閱讀.
+- Run checks with `pip install jsonschema` then `python scripts/validate.py`; the `validate` workflow runs it on every push and PR. Every ```json block in Markdown is validated against the schema, so use ```text for non-prompt JSON-like examples.
