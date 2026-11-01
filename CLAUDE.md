@@ -32,6 +32,7 @@ Conventions:
 
 - Canonical module names: Persona, Task, Context, Format, Depth, Reasoning Mode, Constraint, Decision, Stress Test, Self-check. When renaming a concept, update README, all `docs/` and `CHANGELOG.md`.
 - `docs/templates/prompt-template.json` is the single source for the JSON schema (`version`, `role`, `task.items`, `context.{background,goal,constraints,data}`, `format.{type,length}`, `depth`, `reasoning_mode`, `decision.items`, `stress_test.questions`, `self_check.items`). Every JSON example in Markdown must use the same keys, and Markdown template sections must map one-to-one to them.
+- Every template in `docs/templates/` starts with a 模板卡 table (版本, 狀態, 負責人, 適用層級, 適用／不適用, 驗證紀錄, SLA 面向) as defined in `docs/04-template-system.md`; bump its version and 驗證紀錄 when changing the template. Placeholders use `【變數名】` (mark optional ones「（選填）」), never double braces.
 - Data inside prompts is wrapped in XML-style tags (`<document>`, `<code>`, `<examples>`), not `<<< >>>`.
 - Docs end with a prev / home / next navigation line; keep it in sync when adding or reordering docs.
 - The tutorial page restates docs content; when a doc's concepts or examples change, update the matching lesson in `tutorial/index.html`. Its builder (`buildJSON`) must emit only keys from `prompt-template.json`. Links from the tutorial to docs use `../docs/<name>.html` (Jekyll's output names), and links into it use `tutorial/`.

@@ -79,6 +79,8 @@ Format：【條列 / 表格 / Markdown】，【長度】
 - [萬用模板](docs/templates/general.md)：極簡版、完整版、JSON 版
 - [程式與專案模板](docs/templates/programming.md)：專案掃描、架構設計、重構
 - [投資分析模板](docs/templates/investment.md)：分析類 prompt 寫法示範
+- [Agent 任務模板](docs/templates/agent-task.md)：交給 AI 代理執行的開發與自動化任務
+- [摘要與文件審閱模板](docs/templates/summary-review.md)：會議紀錄、報告等長文件的摘要與審閱
 - [prompt-template.json](docs/templates/prompt-template.json)：統一 JSON 結構
 
 ---
