@@ -5,60 +5,61 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PTCF 互動教學</title>
 <meta name="description" content="Prompt Guide v3.0 互動教學：用 Persona × Task × Context × Format 四層架構寫出高品質 prompt，附選層測驗與 Prompt 產生器。">
+<script>
+  // 在繪製前套用使用者選的主題，避免閃爍
+  try { var t = localStorage.getItem('ptcf-theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+</script>
 <style>
 :root {
   --bg: #fafaf8;
   --surface: #ffffff;
   --surface-2: #f2f1ed;
   --text: #1f2328;
-  --muted: #5d6470;
+  --muted: #565d68;
   --border: #e2e0da;
   --accent: #2f5fd0;
   --accent-soft: #e6edfb;
-  --good: #1f7a4d;
+  --on-accent: #ffffff;
+  --good: #1a7046;
   --good-soft: #e3f3ea;
   --bad: #b3261e;
   --bad-soft: #fbe7e5;
   --l1: #2f5fd0;
   --l2: #7a4fd0;
-  --l3: #c0612b;
-  --l4: #1f7a4d;
+  --l3: #b0561f;
+  --l4: #1a7046;
   --code-bg: #f4f3ef;
   --shadow: 0 1px 2px rgba(0,0,0,.05), 0 2px 8px rgba(0,0,0,.04);
+  --float-shadow: 0 4px 16px rgba(0,0,0,.16);
   --radius: 10px;
   --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
   --mono: ui-monospace, "SFMono-Regular", Consolas, "Noto Sans Mono CJK TC", monospace;
+  color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #15171a;
-    --surface: #1d2024;
-    --surface-2: #25292e;
-    --text: #e6e8eb;
-    --muted: #a0a7b1;
-    --border: #33383f;
-    --accent: #7ea2f5;
-    --accent-soft: #1f2a44;
-    --good: #5cc28e;
-    --good-soft: #17301f;
-    --bad: #f08a80;
-    --bad-soft: #3a1d1b;
-    --l1: #7ea2f5;
-    --l2: #b499f0;
-    --l3: #ef9c69;
-    --l4: #5cc28e;
-    --code-bg: #23272c;
-    --shadow: none;
+    --bg: #15171a; --surface: #1d2024; --surface-2: #262a30; --text: #e6e8eb; --muted: #a3aab4;
+    --border: #353a42; --accent: #85a8f7; --accent-soft: #1f2a44; --on-accent: #0f1625;
+    --good: #5cc28e; --good-soft: #17301f; --bad: #f08a80; --bad-soft: #3a1d1b;
+    --l1: #85a8f7; --l2: #b499f0; --l3: #ef9c69; --l4: #5cc28e;
+    --code-bg: #23272c; --shadow: none; --float-shadow: 0 4px 16px rgba(0,0,0,.5);
+    color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #15171a; --surface: #1d2024; --surface-2: #25292e; --text: #e6e8eb; --muted: #a0a7b1;
-  --border: #33383f; --accent: #7ea2f5; --accent-soft: #1f2a44; --good: #5cc28e; --good-soft: #17301f;
-  --bad: #f08a80; --bad-soft: #3a1d1b; --l1: #7ea2f5; --l2: #b499f0; --l3: #ef9c69; --l4: #5cc28e;
-  --code-bg: #23272c; --shadow: none;
+  --bg: #15171a; --surface: #1d2024; --surface-2: #262a30; --text: #e6e8eb; --muted: #a3aab4;
+  --border: #353a42; --accent: #85a8f7; --accent-soft: #1f2a44; --on-accent: #0f1625;
+  --good: #5cc28e; --good-soft: #17301f; --bad: #f08a80; --bad-soft: #3a1d1b;
+  --l1: #85a8f7; --l2: #b499f0; --l3: #ef9c69; --l4: #5cc28e;
+  --code-bg: #23272c; --shadow: none; --float-shadow: 0 4px 16px rgba(0,0,0,.5);
+  color-scheme: dark;
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
 body {
   margin: 0; background: var(--bg); color: var(--text);
   font-family: var(--font); font-size: 16px; line-height: 1.75;
@@ -81,39 +82,61 @@ th { background: var(--surface-2); font-weight: 600; }
 .table-wrap { overflow-x: auto; }
 button { font: inherit; cursor: pointer; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-/* Layout */
+/* Skip link & progress */
+.skip-link {
+  position: absolute; left: 12px; top: -48px; z-index: 50; padding: 8px 14px; border-radius: 8px;
+  background: var(--accent); color: var(--on-accent); text-decoration: none; font-weight: 600;
+}
+.skip-link:focus { top: 8px; }
+.read-progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: var(--accent); z-index: 30; transition: width .1s linear; }
+
+/* Topbar */
 .topbar {
-  position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 12px;
-  padding: 10px 16px; background: var(--surface); border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 10px;
+  padding: 8px 16px; min-height: 56px; background: var(--surface); border-bottom: 1px solid var(--border);
 }
 .brand { font-weight: 700; text-decoration: none; color: var(--text); white-space: nowrap; }
 .brand span { color: var(--accent); }
 .topbar .spacer { flex: 1; }
-.topbar a.home { font-size: .9rem; white-space: nowrap; }
-.menu-btn {
-  display: none; border: 1px solid var(--border); background: var(--surface-2); color: var(--text);
-  border-radius: 8px; padding: 4px 12px; white-space: nowrap;
+.topbar a.home { font-size: .9rem; white-space: nowrap; display: inline-flex; align-items: center; min-height: 40px; padding: 0 4px; }
+.icon-btn, .menu-btn {
+  border: 1px solid var(--border); background: var(--surface-2); color: var(--text);
+  border-radius: 8px; padding: 6px 12px; min-height: 40px; white-space: nowrap;
 }
-.layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); max-width: 1180px; margin: 0 auto; }
+.menu-btn { display: none; }
+
+/* Layout */
+.layout { display: grid; grid-template-columns: 250px minmax(0, 1fr); max-width: 1180px; margin: 0 auto; }
 nav.toc {
-  position: sticky; top: 57px; align-self: start; height: calc(100vh - 57px); overflow-y: auto;
-  padding: 24px 12px 24px 16px; border-right: 1px solid var(--border);
+  position: sticky; top: 56px; align-self: start; height: calc(100vh - 56px); overflow-y: auto;
+  padding: 20px 12px 24px 16px; border-right: 1px solid var(--border);
 }
+.toc-progress { font-size: .85rem; color: var(--muted); padding: 0 10px 8px; }
+.toc-progress .bar { height: 6px; border-radius: 3px; background: var(--surface-2); margin-top: 4px; overflow: hidden; }
+.toc-progress .bar span { display: block; height: 100%; width: 0; background: var(--good); transition: width .3s; }
+.toc-progress button { border: 0; background: none; color: var(--accent); padding: 0; font-size: .8rem; text-decoration: underline; }
 nav.toc ol { list-style: none; margin: 0; padding: 0; }
 nav.toc a {
-  display: block; padding: 6px 10px; border-radius: 8px; text-decoration: none; color: var(--muted); font-size: .95rem;
+  display: flex; align-items: center; gap: 6px; padding: 7px 10px; border-radius: 8px; text-decoration: none; color: var(--muted); font-size: .95rem;
 }
 nav.toc a:hover { background: var(--surface-2); color: var(--text); }
 nav.toc a.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
-main { padding: 32px 40px 80px; min-width: 0; }
+nav.toc a .check { margin-left: auto; color: var(--good); font-weight: 700; visibility: hidden; }
+nav.toc a.done .check { visibility: visible; }
+main { padding: 32px 40px 96px; min-width: 0; }
+main:focus { outline: none; }
 section.lesson { padding: 28px 0 36px; border-bottom: 1px solid var(--border); }
 section.lesson:last-child { border-bottom: 0; }
 .eyebrow { font-size: .8rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.eyebrow .time { font-weight: 500; letter-spacing: 0; text-transform: none; margin-left: 8px; }
 .lead { font-size: 1.1rem; color: var(--muted); }
 
 /* Hero */
 .hero h1 { font-size: 2.1rem; margin: .25rem 0 .5rem; }
+.cta { display: flex; flex-wrap: wrap; gap: 10px; margin: 1rem 0 .5rem; }
+.cta a { text-decoration: none; }
 .formula {
   display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 1.25rem 0;
   font-size: 1.1rem; font-weight: 600;
@@ -134,14 +157,35 @@ a.card:hover { border-color: var(--accent); }
 .layer-card { border-left: 4px solid var(--c, var(--accent)); }
 .layer-card .lv { font-size: .78rem; font-weight: 700; color: var(--c, var(--accent)); }
 
-/* Tabs (four elements) */
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  border: 1px solid var(--border); background: var(--surface-2); color: var(--text);
+  border-radius: 8px; padding: 8px 16px; min-height: 40px; text-decoration: none;
+}
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn:disabled { opacity: .45; cursor: default; }
+.btn.small { padding: 4px 12px; font-size: .9rem; }
+.linklike { border: 0; background: none; color: var(--accent); padding: 0 2px; text-decoration: underline; font-weight: 600; }
+
+/* Tabs */
 .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 1rem 0 0; }
 .tab {
   border: 1px solid var(--border); background: var(--surface); color: var(--text);
-  border-radius: 999px; padding: 6px 16px;
+  border-radius: 999px; padding: 6px 16px; min-height: 40px;
 }
-.tab[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.tab[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 .tab-panel { margin-top: 12px; }
+
+/* Code copy */
+.code-wrap { position: relative; }
+.code-wrap pre { padding-top: 40px; }
+.code-copy {
+  position: absolute; top: 6px; right: 6px; border: 1px solid var(--border); background: var(--surface);
+  color: var(--muted); border-radius: 6px; padding: 2px 10px; font-size: .8rem; min-height: 30px;
+}
+.code-copy:hover { color: var(--text); }
+.code-copy.ok { color: var(--good); border-color: var(--good); }
 
 /* Compare */
 .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 1rem 0; }
@@ -152,22 +196,21 @@ a.card:hover { border-color: var(--accent); }
 .compare .bad .label { color: var(--bad); }
 .compare .good .label { color: var(--good); }
 .compare pre { background: transparent; border: 0; padding: 4px 0 0; margin: 0; }
+.compare .hint { color: var(--text); opacity: .85; }
 
 /* Stepper */
 .stepper { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
-.steps-bar { display: flex; gap: 4px; margin-bottom: 12px; }
-.steps-bar span { flex: 1; height: 6px; border-radius: 3px; background: var(--surface-2); }
-.steps-bar span.on { background: var(--l3); }
+.stepper-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 10px; }
+.steps-bar { display: flex; gap: 4px; flex: 1; }
+.steps-bar button { flex: 1; height: 24px; border: 0; padding: 0; background: none; position: relative; }
+.steps-bar button::after { content: ""; position: absolute; left: 0; right: 0; top: 9px; height: 6px; border-radius: 3px; background: var(--surface-2); }
+.steps-bar button.on::after { background: var(--l3); }
 .step-title { font-weight: 700; font-size: 1.05rem; }
 .step-body { color: var(--muted); min-height: 3.5em; }
 .step-nav { display: flex; gap: 8px; justify-content: space-between; align-items: center; margin-top: 8px; }
-.btn {
-  border: 1px solid var(--border); background: var(--surface-2); color: var(--text);
-  border-radius: 8px; padding: 6px 14px;
-}
-.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-.btn:disabled { opacity: .45; cursor: default; }
-.btn.small { padding: 3px 10px; font-size: .88rem; }
+.steps-all { margin: 0; padding-left: 1.4em; }
+.steps-all li { margin: 4px 0; }
+.steps-all li span { color: var(--muted); }
 
 /* Callout */
 .callout {
@@ -176,41 +219,61 @@ a.card:hover { border-color: var(--accent); }
 }
 .callout strong { color: var(--accent); }
 
+/* Lesson footer */
+.lesson-next { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 24px; padding-top: 16px; border-top: 1px dashed var(--border); }
+.lesson-next .done-note { color: var(--good); font-size: .9rem; font-weight: 600; }
+
 /* Quiz */
+.quiz-meta { color: var(--muted); font-size: .92rem; }
 .quiz-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin: 10px 0; }
 .quiz-q { font-weight: 600; margin-bottom: 8px; }
 .quiz-opts { display: flex; flex-wrap: wrap; gap: 8px; }
-.quiz-opt { border: 1px solid var(--border); background: var(--surface-2); color: var(--text); border-radius: 8px; padding: 5px 12px; }
+.quiz-opt { border: 1px solid var(--border); background: var(--surface-2); color: var(--text); border-radius: 8px; padding: 6px 14px; min-height: 40px; }
 .quiz-opt.correct { background: var(--good-soft); border-color: var(--good); color: var(--good); font-weight: 600; }
 .quiz-opt.wrong { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); }
+.quiz-opt:disabled { cursor: default; }
 .quiz-fb { margin-top: 8px; font-size: .93rem; color: var(--muted); }
-.quiz-score { font-weight: 700; }
+.quiz-summary { margin: 12px 0; }
 
 /* Builder */
 .builder { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; align-items: start; }
 .builder-form, .builder-out { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
 .builder-out { position: sticky; top: 72px; }
-.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 12px; flex-wrap: wrap; }
-.seg button { border: 0; background: var(--surface); color: var(--text); padding: 6px 12px; border-right: 1px solid var(--border); }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex-wrap: wrap; }
+.seg button { border: 0; background: var(--surface); color: var(--text); padding: 8px 12px; min-height: 40px; border-right: 1px solid var(--border); }
 .seg button:last-child { border-right: 0; }
-.seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
-.presets { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px; align-items: center; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+.level-hint { font-size: .88rem; color: var(--muted); margin: 6px 0 12px; }
+.presets { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; align-items: center; }
 .presets .lbl { font-size: .88rem; color: var(--muted); }
+.notice {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: .9rem;
+  background: var(--accent-soft); border-radius: 8px; padding: 6px 10px; margin: 8px 0;
+}
 fieldset { border: 0; padding: 0; margin: 0 0 8px; }
 legend { font-weight: 700; font-size: .85rem; letter-spacing: .04em; padding: 0; margin: 10px 0 4px; }
 legend.l1 { color: var(--l1); } legend.l2 { color: var(--l2); } legend.l3 { color: var(--l3); }
 label { display: block; font-size: .88rem; color: var(--muted); margin: 8px 0 3px; }
 input[type="text"], textarea {
-  width: 100%; font: inherit; font-size: .95rem; color: var(--text); background: var(--bg);
-  border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px;
+  width: 100%; font: inherit; font-size: 1rem; color: var(--text); background: var(--bg);
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px;
 }
 textarea { min-height: 64px; resize: vertical; line-height: 1.55; }
 .hint { font-size: .8rem; color: var(--muted); }
 .out-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
 .out-tabs { display: flex; gap: 6px; }
+.out-actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
 #out { max-height: 62vh; overflow: auto; margin: 0; }
 .copied { color: var(--good); font-size: .85rem; }
+.back-form { display: none; margin-bottom: 8px; }
 [hidden] { display: none !important; }
+
+/* Floating buttons */
+.fab {
+  position: fixed; right: 16px; bottom: 16px; z-index: 25; border-radius: 999px;
+  box-shadow: var(--float-shadow);
+}
+.fab-out { right: auto; left: 50%; transform: translateX(-50%); }
 
 footer { color: var(--muted); font-size: .9rem; padding-top: 24px; }
 
@@ -218,51 +281,70 @@ footer { color: var(--muted); font-size: .9rem; padding-top: 24px; }
 @media (max-width: 900px) {
   .layout { grid-template-columns: minmax(0, 1fr); }
   .menu-btn { display: inline-block; }
+  .topbar a.home .long { display: none; }
   nav.toc {
-    display: none; position: fixed; top: 53px; left: 0; right: 0; height: auto; max-height: 70vh;
-    background: var(--surface); border-right: 0; border-bottom: 1px solid var(--border); z-index: 19; padding: 8px 16px 12px;
+    display: none; position: fixed; top: 56px; left: 0; right: 0; height: auto; max-height: 75vh;
+    background: var(--surface); border-right: 0; border-bottom: 1px solid var(--border); z-index: 19; padding: 12px 16px;
+    box-shadow: var(--float-shadow);
   }
   nav.toc.open { display: block; }
-  main { padding: 16px 16px 64px; }
+  main { padding: 16px 16px 96px; }
   .builder { grid-template-columns: minmax(0, 1fr); }
   .builder-out { position: static; }
+  .back-form { display: inline-flex; }
   .compare { grid-template-columns: minmax(0, 1fr); }
   .hero h1 { font-size: 1.6rem; }
   h2 { font-size: 1.35rem; }
 }
+@media (min-width: 901px) { .fab-out { display: none !important; } }
 </style>
 </head>
 <body>
 
+<a class="skip-link" href="#main">跳到主要內容</a>
+<div class="read-progress" id="readProgress" aria-hidden="true"></div>
+
 <header class="topbar">
-  <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="toc">目錄</button>
+  <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="toc">☰ 目錄</button>
   <a class="brand" href="#start">PTCF <span>互動教學</span></a>
   <div class="spacer"></div>
-  <a class="home" href="../">← 回 Prompt Guide 首頁</a>
+  <button class="icon-btn" id="themeBtn" type="button" aria-label="切換主題">◐ 系統</button>
+  <a class="home" href="../">← <span class="long">回 Prompt Guide </span>首頁</a>
 </header>
 
 <div class="layout">
   <nav class="toc" id="toc" aria-label="章節目錄">
+    <div class="toc-progress">
+      <span id="tocCount">已完成 0 / 6 課</span>
+      <div class="bar"><span id="tocBar"></span></div>
+      <button type="button" id="resetProgress" hidden>重設進度</button>
+    </div>
     <ol>
       <li><a href="#start">開始：一句話公式</a></li>
-      <li><a href="#l1">Lesson 1　四要素</a></li>
-      <li><a href="#l2">Lesson 2　進階控制</a></li>
-      <li><a href="#l3">Lesson 3　決策閉環</a></li>
-      <li><a href="#l4">Lesson 4　模板與評估</a></li>
-      <li><a href="#modern">現代技巧速覽</a></li>
-      <li><a href="#quiz">選層小測驗</a></li>
+      <li><a href="#l1" data-track="l1">Lesson 1　四要素<span class="check" aria-hidden="true">✓</span></a></li>
+      <li><a href="#l2" data-track="l2">Lesson 2　進階控制<span class="check" aria-hidden="true">✓</span></a></li>
+      <li><a href="#l3" data-track="l3">Lesson 3　決策閉環<span class="check" aria-hidden="true">✓</span></a></li>
+      <li><a href="#l4" data-track="l4">Lesson 4　模板與評估<span class="check" aria-hidden="true">✓</span></a></li>
+      <li><a href="#modern" data-track="modern">現代技巧速覽<span class="check" aria-hidden="true">✓</span></a></li>
+      <li><a href="#quiz" data-track="quiz">選層小測驗<span class="check" aria-hidden="true">✓</span></a></li>
       <li><a href="#builder">Prompt 產生器</a></li>
       <li><a href="#more">延伸閱讀</a></li>
     </ol>
   </nav>
 
-  <main>
+  <main id="main" tabindex="-1">
 
   <!-- 開始 -->
   <section class="lesson hero" id="start">
     <div class="eyebrow">Prompt Guide v3.0</div>
     <h1>控制思考，而不只是控制輸出</h1>
-    <p class="lead">用 30 分鐘學會一套分層的 prompt 寫法：日常任務四行搞定，重要決策有完整閉環。</p>
+    <p class="lead">用約 25 分鐘學會一套分層的 prompt 寫法：日常任務四行搞定，重要決策有完整閉環。</p>
+
+    <div class="cta">
+      <a class="btn primary" href="#l1" id="ctaStart">從 Lesson 1 開始 →</a>
+      <a class="btn" href="#builder">直接使用 Prompt 產生器</a>
+    </div>
+    <p class="hint">進度會記在這個瀏覽器中，下次回來可以接著讀。</p>
 
     <div class="formula" aria-label="有效輸出等於 Persona 乘 Task 乘 Context 乘 Format">
       <span>有效輸出 =</span>
@@ -276,10 +358,10 @@ footer { color: var(--muted); font-size: .9rem; padding-top: 24px; }
 
     <h3>四層架構：依任務價值往上加</h3>
     <div class="grid">
-      <div class="card layer-card" style="--c: var(--l1)"><div class="lv">LEVEL 1｜核心層</div><h4>Persona・Task・Context・Format</h4><p>約 80% 的日常任務只需要這層。</p></div>
-      <div class="card layer-card" style="--c: var(--l2)"><div class="lv">LEVEL 2｜進階控制</div><h4>Depth・Reasoning Mode・Constraint</h4><p>想多深、怎麼想、邊界在哪。</p></div>
-      <div class="card layer-card" style="--c: var(--l3)"><div class="lv">LEVEL 3｜決策與驗證</div><h4>Decision・Stress Test・Self-check</h4><p>從分析走到可以拍板的結論。</p></div>
-      <div class="card layer-card" style="--c: var(--l4)"><div class="lv">LEVEL 4｜模板與知識</div><h4>模板庫・Output SLA</h4><p>每次都寫好，別人也能用。</p></div>
+      <a class="card layer-card" href="#l1" style="--c: var(--l1)"><div class="lv">LEVEL 1｜核心層</div><h4>Persona・Task・Context・Format</h4><p>約 80% 的日常任務只需要這層。</p></a>
+      <a class="card layer-card" href="#l2" style="--c: var(--l2)"><div class="lv">LEVEL 2｜進階控制</div><h4>Depth・Reasoning Mode・Constraint</h4><p>想多深、怎麼想、邊界在哪。</p></a>
+      <a class="card layer-card" href="#l3" style="--c: var(--l3)"><div class="lv">LEVEL 3｜決策與驗證</div><h4>Decision・Stress Test・Self-check</h4><p>從分析走到可以拍板的結論。</p></a>
+      <a class="card layer-card" href="#l4" style="--c: var(--l4)"><div class="lv">LEVEL 4｜模板與知識</div><h4>模板庫・Output SLA</h4><p>每次都寫好，別人也能用。</p></a>
     </div>
 
     <h3>30 秒範本</h3>
@@ -295,12 +377,12 @@ Format：【條列 / 表格 / Markdown】，【長度】
 
   <!-- Lesson 1 -->
   <section class="lesson" id="l1">
-    <div class="eyebrow" style="color: var(--l1)">Lesson 1</div>
+    <div class="eyebrow" style="color: var(--l1)">Lesson 1<span class="time">約 5 分鐘</span></div>
     <h2>四要素：把 prompt 寫完整</h2>
-    <p>點選下方每個要素，看看它控制什麼、怎麼寫。</p>
+    <p>點選下方每個要素（也可用方向鍵切換），看看它控制什麼、怎麼寫。</p>
 
-    <div class="tabs" role="tablist" id="ptcfTabs"></div>
-    <div class="tab-panel card" id="ptcfPanel" role="tabpanel"></div>
+    <div class="tabs" role="tablist" aria-label="四要素" id="ptcfTabs"></div>
+    <div class="tab-panel card" id="ptcfPanel" role="tabpanel" tabindex="0"></div>
 
     <h3>前後對照：同一個需求，兩種寫法</h3>
     <div class="compare">
@@ -331,11 +413,12 @@ Format：
       </div>
     </div>
     <div class="callout"><strong>小提醒：</strong>Persona 主要影響用語與觀點，不保證答案更正確。事實正確性靠的是 Context（提供資料）與 Level 3 的驗證。</div>
+    <div class="lesson-next" data-done="l1" data-next="l2" data-next-label="Lesson 2　進階控制"></div>
   </section>
 
   <!-- Lesson 2 -->
   <section class="lesson" id="l2">
-    <div class="eyebrow" style="color: var(--l2)">Lesson 2</div>
+    <div class="eyebrow" style="color: var(--l2)">Lesson 2<span class="time">約 5 分鐘</span></div>
     <h2>進階控制：想多深、怎麼想、邊界在哪</h2>
 
     <div class="table-wrap"><table>
@@ -373,23 +456,32 @@ Format：
 &lt;output&gt;改用對照表或策略模式取代多重 if-else。&lt;/output&gt;
 &lt;/example&gt;
 &lt;/examples&gt;</pre>
+    <div class="lesson-next" data-done="l2" data-next="l3" data-next-label="Lesson 3　決策閉環"></div>
   </section>
 
   <!-- Lesson 3 -->
   <section class="lesson" id="l3">
-    <div class="eyebrow" style="color: var(--l3)">Lesson 3</div>
+    <div class="eyebrow" style="color: var(--l3)">Lesson 3<span class="time">約 5 分鐘</span></div>
     <h2>決策閉環：從分析走到結論</h2>
     <p>只有分析、沒有結論的回答，常見症狀是「各有優缺點，視情況而定」。用 8 步驟把它變成可以拍板的報告：</p>
 
-    <div class="stepper" id="stepper" aria-live="polite">
-      <div class="steps-bar" id="stepsBar"></div>
-      <div class="step-title" id="stepTitle"></div>
-      <div class="step-body" id="stepBody"></div>
-      <div class="step-nav">
-        <button class="btn" id="stepPrev">← 上一步</button>
-        <span class="hint" id="stepCount"></span>
-        <button class="btn primary" id="stepNext">下一步 →</button>
+    <div class="stepper" id="stepper">
+      <div class="stepper-head">
+        <div class="steps-bar" id="stepsBar" aria-label="跳到步驟"></div>
+        <button class="btn small" type="button" id="stepAll" aria-pressed="false">全部展開</button>
       </div>
+      <div id="stepSingle" tabindex="0" aria-label="決策步驟，可用左右方向鍵切換">
+        <div aria-live="polite">
+          <div class="step-title" id="stepTitle"></div>
+          <div class="step-body" id="stepBody"></div>
+        </div>
+        <div class="step-nav">
+          <button class="btn" type="button" id="stepPrev">← 上一步</button>
+          <span class="hint" id="stepCount"></span>
+          <button class="btn primary" type="button" id="stepNext">下一步 →</button>
+        </div>
+      </div>
+      <ol class="steps-all" id="stepList" hidden></ol>
     </div>
 
     <h3>Stress Test：這個結論在哪裡會崩？</h3>
@@ -403,11 +495,12 @@ Format：
 
     <h3>Self-check 的限制</h3>
     <div class="callout">同一次回答中的自我檢查效果有限，模型常會「確認」自己的答案。重要決策建議<strong>另開一次對話</strong>，請模型以審查者身份批評，或交由人工審核。</div>
+    <div class="lesson-next" data-done="l3" data-next="l4" data-next-label="Lesson 4　模板與評估"></div>
   </section>
 
   <!-- Lesson 4 -->
   <section class="lesson" id="l4">
-    <div class="eyebrow" style="color: var(--l4)">Lesson 4</div>
+    <div class="eyebrow" style="color: var(--l4)">Lesson 4<span class="time">約 4 分鐘</span></div>
     <h2>模板與評估：讓好 prompt 可以重複</h2>
     <p>先定義「什麼叫做好」，才能驗收輸出、比較 prompt 版本。Output SLA 的五個面向可以直接當評分表：</p>
 
@@ -425,11 +518,12 @@ Format：
     <h3>評估流程</h3>
 <pre>定義成功標準 → 準備 5–20 個測試案例 → 跑出輸出 → 評分 → 一次只改一個變因 → 重跑比較</pre>
     <p>一次性的個人任務不需要這麼做；每週重複使用的 prompt、團隊共用模板與自動化流程才值得建立測試案例。</p>
+    <div class="lesson-next" data-done="l4" data-next="modern" data-next-label="現代技巧速覽"></div>
   </section>
 
   <!-- Modern -->
   <section class="lesson" id="modern">
-    <div class="eyebrow">與時俱進</div>
+    <div class="eyebrow">與時俱進<span class="time">約 4 分鐘</span></div>
     <h2>現代技巧速覽</h2>
     <div class="grid">
       <div class="card"><h4>用標籤組織 prompt</h4><p>用 <code>&lt;document&gt;</code>、<code>&lt;instructions&gt;</code> 區隔資料與指令，多份文件時更不會混淆。</p></div>
@@ -444,23 +538,25 @@ Format：
 驗收：現有測試全過，並新增 CSV 匯出的測試。
 限制：不新增第三方套件，因為新套件需經資安審核。
 完成後請列出你沒有驗證到的部分。</pre>
+    <div class="lesson-next" data-done="modern" data-next="quiz" data-next-label="選層小測驗"></div>
   </section>
 
   <!-- Quiz -->
   <section class="lesson" id="quiz">
-    <div class="eyebrow">練習</div>
+    <div class="eyebrow">練習<span class="time">約 2 分鐘</span></div>
     <h2>選層小測驗</h2>
     <p>不要為了完整而完整。以下情境，應該啟用到哪一層？</p>
+    <p class="quiz-meta" id="quizMeta" aria-live="polite"></p>
     <div id="quizList"></div>
-    <p class="quiz-score" id="quizScore" aria-live="polite"></p>
-    <button class="btn small" id="quizReset">重新作答</button>
+    <div class="quiz-summary callout" id="quizSummary" hidden aria-live="polite"></div>
+    <button class="btn small" type="button" id="quizReset">重新作答</button>
   </section>
 
   <!-- Builder -->
   <section class="lesson" id="builder">
     <div class="eyebrow">實作</div>
     <h2>Prompt 產生器</h2>
-    <p>選擇層級、填入欄位，右側會即時產生 Markdown prompt 與 JSON（欄位與 <a href="../docs/templates/prompt-template.json">prompt-template.json</a> 一致）。草稿會暫存在這個瀏覽器中。</p>
+    <p>選擇層級、填入欄位，即時產生 Markdown prompt 與 JSON（欄位與 <a href="../docs/templates/prompt-template.json">prompt-template.json</a> 一致）。草稿會暫存在這個瀏覽器中。</p>
 
     <div class="builder">
       <form class="builder-form" id="bForm" autocomplete="off" onsubmit="return false">
@@ -469,6 +565,7 @@ Format：
           <button type="button" data-level="2" aria-pressed="false">Level 1 + 2</button>
           <button type="button" data-level="3" aria-pressed="false">Level 1 + 2 + 3</button>
         </div>
+        <p class="level-hint" id="levelHint" aria-live="polite"></p>
         <div class="presets">
           <span class="lbl">載入範例：</span>
           <button type="button" class="btn small" data-preset="linkedin">LinkedIn 自介</button>
@@ -476,6 +573,7 @@ Format：
           <button type="button" class="btn small" data-preset="svn">SVN 轉 Git</button>
           <button type="button" class="btn small" data-preset="clear">清空</button>
         </div>
+        <div class="notice" id="bNotice" role="status" hidden></div>
 
         <fieldset>
           <legend class="l1">LEVEL 1｜核心層</legend>
@@ -516,18 +614,20 @@ Format：
         </fieldset>
       </form>
 
-      <div class="builder-out">
+      <div class="builder-out" id="builderOut">
+        <a class="btn small back-form" href="#bForm">↑ 回到表單</a>
         <div class="out-head">
-          <div class="out-tabs" role="tablist" aria-label="輸出格式">
-            <button type="button" class="btn small primary" data-out="md" aria-selected="true">Markdown</button>
-            <button type="button" class="btn small" data-out="json" aria-selected="false">JSON</button>
+          <div class="out-tabs" role="tablist" aria-label="輸出格式" id="outTabs">
+            <button type="button" class="btn small primary" role="tab" id="tab-md" data-out="md" aria-selected="true" aria-controls="out">Markdown</button>
+            <button type="button" class="btn small" role="tab" id="tab-json" data-out="json" aria-selected="false" aria-controls="out" tabindex="-1">JSON</button>
           </div>
-          <div>
-            <span class="copied" id="copied" hidden>已複製</span>
+          <div class="out-actions">
+            <span class="copied" id="copied" role="status" hidden>已複製</span>
             <button type="button" class="btn small" id="copyBtn">複製</button>
+            <button type="button" class="btn small" id="downloadBtn">下載 .md</button>
           </div>
         </div>
-        <pre id="out"></pre>
+        <pre id="out" role="tabpanel" aria-labelledby="tab-md" tabindex="0"></pre>
       </div>
     </div>
   </section>
@@ -555,35 +655,167 @@ Format：
   </main>
 </div>
 
+<button type="button" class="btn primary fab fab-out" id="fabOut" hidden>查看輸出 ↓</button>
+<button type="button" class="btn fab" id="toTop" aria-label="回到頂端" hidden>↑ 頂端</button>
+
 <script>
 (function () {
   'use strict';
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function store(key, val) {
+    try {
+      if (val === undefined) { var raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : null; }
+      if (val === null) localStorage.removeItem(key); else localStorage.setItem(key, JSON.stringify(val));
+    } catch (e) {}
+    return null;
+  }
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function goTo(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    try { history.replaceState(null, '', '#' + id); } catch (e) {}
+    var h = $('h2, h1', el);
+    if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
+  }
+  function copyText(text, onDone) {
+    function fallback() {
+      var ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); onDone(); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(onDone, fallback);
+    else fallback();
+  }
+  // 方向鍵切換的 tablist（roving tabindex）
+  function arrowTabs(list, onSelect) {
+    list.addEventListener('keydown', function (e) {
+      var items = $$('[role="tab"]', list), i = items.indexOf(document.activeElement);
+      if (i < 0) return;
+      var n = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: items.length - 1 }[e.key];
+      if (n === undefined) return;
+      e.preventDefault();
+      n = (n + items.length) % items.length;
+      onSelect(n); items[n].focus();
+    });
+  }
 
-  /* ---------- Mobile menu & active section ---------- */
+  /* ---------- Theme ---------- */
+  var themes = ['system', 'light', 'dark'], themeLabel = { system: '◐ 系統', light: '☀ 淺色', dark: '☾ 深色' };
+  var theme = store('ptcf-theme') || 'system';
+  function applyTheme() {
+    if (theme === 'system') document.documentElement.removeAttribute('data-theme');
+    else document.documentElement.setAttribute('data-theme', theme);
+    $('#themeBtn').textContent = themeLabel[theme];
+    $('#themeBtn').setAttribute('aria-label', '切換主題（目前：' + themeLabel[theme].slice(2) + '）');
+  }
+  $('#themeBtn').addEventListener('click', function () {
+    theme = themes[(themes.indexOf(theme) + 1) % themes.length];
+    store('ptcf-theme', theme === 'system' ? null : theme);
+    applyTheme();
+  });
+  applyTheme();
+
+  /* ---------- Mobile menu ---------- */
   var toc = $('#toc'), menuBtn = $('#menuBtn');
-  menuBtn.addEventListener('click', function () {
-    var open = toc.classList.toggle('open');
+  function setMenu(open, refocus) {
+    toc.classList.toggle('open', open);
     menuBtn.setAttribute('aria-expanded', String(open));
+    if (!open && refocus) menuBtn.focus();
+    if (open) { var a = $('a', toc); if (a) a.focus(); }
+  }
+  menuBtn.addEventListener('click', function () { setMenu(!toc.classList.contains('open')); });
+  $$('#toc a').forEach(function (a) { a.addEventListener('click', function () { setMenu(false); }); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && toc.classList.contains('open')) setMenu(false, true);
   });
-  $$('#toc a').forEach(function (a) {
-    a.addEventListener('click', function () { toc.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); });
+  document.addEventListener('click', function (e) {
+    if (toc.classList.contains('open') && !toc.contains(e.target) && !menuBtn.contains(e.target)) setMenu(false);
   });
+
+  /* ---------- Active section, reading progress, floating buttons ---------- */
   if ('IntersectionObserver' in window) {
     var links = {};
     $$('#toc a').forEach(function (a) { links[a.getAttribute('href').slice(1)] = a; });
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (e.isIntersecting && links[e.target.id]) {
-          $$('#toc a').forEach(function (a) { a.classList.remove('active'); });
+          $$('#toc a').forEach(function (a) { a.classList.remove('active'); a.removeAttribute('aria-current'); });
           links[e.target.id].classList.add('active');
+          links[e.target.id].setAttribute('aria-current', 'location');
         }
       });
     }, { rootMargin: '-30% 0px -60% 0px' });
     $$('section.lesson').forEach(function (s) { io.observe(s); });
   }
+  var readBar = $('#readProgress'), toTop = $('#toTop'), fabOut = $('#fabOut');
+  var builderSec = $('#builder'), outBox = $('#builderOut');
+  function onScroll() {
+    var doc = document.documentElement, max = doc.scrollHeight - innerHeight;
+    readBar.style.width = (max > 0 ? Math.min(100, scrollY / max * 100) : 0) + '%';
+    toTop.hidden = scrollY < innerHeight;
+    var b = builderSec.getBoundingClientRect(), o = outBox.getBoundingClientRect();
+    var inBuilder = b.top < innerHeight * 0.5 && b.bottom > innerHeight * 0.5;
+    var outVisible = o.top < innerHeight && o.bottom > 0;
+    fabOut.hidden = !(inBuilder && !outVisible && o.top > innerHeight);
+  }
+  addEventListener('scroll', onScroll, { passive: true });
+  addEventListener('resize', onScroll);
+  toTop.addEventListener('click', function () { goTo('start'); });
+  fabOut.addEventListener('click', function () { goTo('builderOut'); });
+
+  /* ---------- Lesson progress ---------- */
+  var PROGRESS = 'ptcf-progress-v1';
+  var tracked = $$('#toc a[data-track]').map(function (a) { return a.dataset.track; });
+  var done = store(PROGRESS) || {};
+  function renderProgress() {
+    var n = tracked.filter(function (k) { return done[k]; }).length;
+    $('#tocCount').textContent = '已完成 ' + n + ' / ' + tracked.length + ' 課';
+    $('#tocBar').style.width = (n / tracked.length * 100) + '%';
+    $('#resetProgress').hidden = n === 0;
+    $$('#toc a[data-track]').forEach(function (a) { a.classList.toggle('done', !!done[a.dataset.track]); });
+    $$('.lesson-next').forEach(function (box) {
+      var note = $('.done-note', box);
+      if (note) note.hidden = !done[box.dataset.done];
+    });
+    var firstOpen = tracked.filter(function (k) { return !done[k]; })[0];
+    var cta = $('#ctaStart');
+    if (n > 0 && firstOpen) { cta.textContent = '繼續上次進度 →'; cta.setAttribute('href', '#' + firstOpen); }
+    else if (!firstOpen) { cta.textContent = '全部完成！前往產生器 →'; cta.setAttribute('href', '#builder'); }
+    else { cta.textContent = '從 Lesson 1 開始 →'; cta.setAttribute('href', '#l1'); }
+  }
+  function markDone(k) { done[k] = true; store(PROGRESS, done); renderProgress(); }
+  $$('.lesson-next').forEach(function (box) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'btn primary';
+    b.textContent = '完成，前往下一課：' + box.dataset.nextLabel + ' →';
+    b.addEventListener('click', function () { markDone(box.dataset.done); goTo(box.dataset.next); });
+    var note = document.createElement('span');
+    note.className = 'done-note'; note.textContent = '✓ 本課已完成'; note.hidden = true;
+    box.appendChild(b); box.appendChild(note);
+  });
+  $('#resetProgress').addEventListener('click', function () { done = {}; store(PROGRESS, null); renderProgress(); });
+  renderProgress();
+
+  /* ---------- Copy buttons on example code ---------- */
+  $$('main pre').forEach(function (pre) {
+    if (pre.id === 'out' || pre.closest('.compare .bad')) return;
+    var wrap = document.createElement('div'); wrap.className = 'code-wrap';
+    pre.parentNode.insertBefore(wrap, pre); wrap.appendChild(pre);
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'code-copy'; b.textContent = '複製';
+    b.setAttribute('aria-label', '複製這段範例');
+    b.addEventListener('click', function () {
+      copyText(pre.textContent, function () {
+        b.textContent = '已複製'; b.classList.add('ok');
+        setTimeout(function () { b.textContent = '複製'; b.classList.remove('ok'); }, 1500);
+      });
+    });
+    wrap.appendChild(b);
+  });
 
   /* ---------- Lesson 1: PTCF tabs ---------- */
   var ptcf = [
@@ -602,7 +834,11 @@ Format：
   ];
   var tabs = $('#ptcfTabs'), panel = $('#ptcfPanel');
   function showPtcf(i) {
-    $$('.tab', tabs).forEach(function (t, j) { t.setAttribute('aria-selected', String(i === j)); });
+    $$('.tab', tabs).forEach(function (t, j) {
+      t.setAttribute('aria-selected', String(i === j));
+      t.tabIndex = i === j ? 0 : -1;
+    });
+    panel.setAttribute('aria-labelledby', 'ptcf-tab-' + i);
     var p = ptcf[i];
     panel.innerHTML = '<h4>' + p.name + '（' + p.zh + '）</h4>' +
       '<p><strong>核心問題：</strong>' + p.q + '　<strong>控制的是：</strong>' + p.ctrl + '</p>' +
@@ -610,11 +846,13 @@ Format：
   }
   ptcf.forEach(function (p, i) {
     var b = document.createElement('button');
-    b.className = 'tab'; b.type = 'button'; b.setAttribute('role', 'tab');
+    b.className = 'tab'; b.type = 'button'; b.id = 'ptcf-tab-' + i;
+    b.setAttribute('role', 'tab'); b.setAttribute('aria-controls', 'ptcfPanel');
     b.textContent = p.name + '・' + p.zh;
     b.addEventListener('click', function () { showPtcf(i); });
     tabs.appendChild(b);
   });
+  arrowTabs(tabs, showPtcf);
   showPtcf(0);
 
   /* ---------- Lesson 3: stepper ---------- */
@@ -628,22 +866,44 @@ Format：
     ['壓力測試', '挑戰結論：規模、假設、最壞情境、反方意見。'],
     ['自我檢查', '推理有沒有跳躍？關鍵主張有沒有資料支持？有沒有更簡單的做法？']
   ];
-  var si = 0, bar = $('#stepsBar');
-  steps.forEach(function () { bar.appendChild(document.createElement('span')); });
+  var si = 0, bar = $('#stepsBar'), stepList = $('#stepList');
+  steps.forEach(function (s, i) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.setAttribute('aria-label', '第 ' + (i + 1) + ' 步：' + s[0]);
+    b.addEventListener('click', function () { si = i; showAll(false); renderStep(); });
+    bar.appendChild(b);
+    var li = document.createElement('li');
+    li.innerHTML = '<strong>' + esc(s[0]) + '</strong>　<span>' + esc(s[1]) + '</span>';
+    stepList.appendChild(li);
+  });
   function renderStep() {
-    $$('span', bar).forEach(function (s, j) { s.classList.toggle('on', j <= si); });
+    $$('button', bar).forEach(function (s, j) { s.classList.toggle('on', j <= si); s.setAttribute('aria-current', j === si ? 'step' : 'false'); });
     $('#stepTitle').textContent = (si + 1) + '. ' + steps[si][0];
     $('#stepBody').textContent = steps[si][1];
     $('#stepCount').textContent = (si + 1) + ' / ' + steps.length;
     $('#stepPrev').disabled = si === 0;
     $('#stepNext').disabled = si === steps.length - 1;
   }
-  $('#stepPrev').addEventListener('click', function () { if (si > 0) { si--; renderStep(); } });
-  $('#stepNext').addEventListener('click', function () { if (si < steps.length - 1) { si++; renderStep(); } });
+  function move(d) { var n = si + d; if (n >= 0 && n < steps.length) { si = n; renderStep(); } }
+  function showAll(on) {
+    $('#stepAll').setAttribute('aria-pressed', String(on));
+    $('#stepAll').textContent = on ? '逐步顯示' : '全部展開';
+    $('#stepSingle').hidden = on; stepList.hidden = !on;
+    $$('button', bar).forEach(function (s) { s.classList.toggle('on', on || $$('button', bar).indexOf(s) <= si); });
+  }
+  $('#stepPrev').addEventListener('click', function () { move(-1); });
+  $('#stepNext').addEventListener('click', function () { move(1); });
+  $('#stepSingle').addEventListener('keydown', function (e) {
+    if (e.target.tagName === 'BUTTON' && e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); move(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); move(-1); }
+  });
+  $('#stepAll').addEventListener('click', function () { showAll($('#stepAll').getAttribute('aria-pressed') !== 'true'); });
   renderStep();
 
   /* ---------- Quiz ---------- */
   var levels = ['Level 1', 'Level 1 + 2', 'Level 1 + 2 + 3'];
+  var levelLesson = ['l1', 'l2', 'l3'];
   var quiz = [
     { q: '把一封英文 email 翻譯成中文。', a: 0, why: '低風險、目標明確，四要素寫清楚就夠了。' },
     { q: '設計一個每日 100 萬請求的 API 架構。', a: 1, why: '需要指定分析深度（系統設計層、可擴展性）與限制條件，但不一定要做決策閉環。' },
@@ -656,38 +916,56 @@ Format：
     var list = $('#quizList'); list.innerHTML = ''; answered = {};
     quiz.forEach(function (item, qi) {
       var div = document.createElement('div'); div.className = 'quiz-item';
-      div.innerHTML = '<div class="quiz-q">' + (qi + 1) + '. ' + esc(item.q) + '</div><div class="quiz-opts"></div><div class="quiz-fb" aria-live="polite"></div>';
+      div.setAttribute('role', 'group'); div.setAttribute('aria-labelledby', 'quiz-q-' + qi);
+      div.innerHTML = '<div class="quiz-q" id="quiz-q-' + qi + '">' + (qi + 1) + '. ' + esc(item.q) + '</div><div class="quiz-opts"></div><div class="quiz-fb" aria-live="polite"></div>';
       var opts = $('.quiz-opts', div), fb = $('.quiz-fb', div);
       levels.forEach(function (lv, li) {
         var b = document.createElement('button'); b.type = 'button'; b.className = 'quiz-opt'; b.textContent = lv;
         b.addEventListener('click', function () {
           if (answered[qi] !== undefined) return;
-          answered[qi] = li === item.a;
+          answered[qi] = li;
           $$('.quiz-opt', opts).forEach(function (o, oi) {
             o.disabled = true;
             if (oi === item.a) o.classList.add('correct');
             else if (oi === li) o.classList.add('wrong');
           });
           fb.textContent = (li === item.a ? '✓ 答對了。' : '✗ 建議是 ' + levels[item.a] + '。') + item.why;
-          updateScore();
+          updateQuiz();
         });
         opts.appendChild(b);
       });
       list.appendChild(div);
     });
-    updateScore();
+    updateQuiz();
   }
-  function updateScore() {
-    var keys = Object.keys(answered), ok = keys.filter(function (k) { return answered[k]; }).length;
-    $('#quizScore').textContent = keys.length === quiz.length ? '得分：' + ok + ' / ' + quiz.length + (ok === quiz.length ? '，全對！' : '') : '';
+  function updateQuiz() {
+    var keys = Object.keys(answered);
+    var ok = keys.filter(function (k) { return answered[k] === quiz[k].a; }).length;
+    $('#quizMeta').textContent = '已作答 ' + keys.length + ' / ' + quiz.length + (keys.length ? '・答對 ' + ok + ' 題' : '');
+    var sum = $('#quizSummary');
+    if (keys.length < quiz.length) { sum.hidden = true; return; }
+    var missed = {};
+    keys.forEach(function (k) { if (answered[k] !== quiz[k].a) missed[quiz[k].a] = true; });
+    var html = '<strong>得分 ' + ok + ' / ' + quiz.length + '。</strong>';
+    if (ok === quiz.length) html += '全部答對！可以到下方的產生器實際寫一個 prompt。';
+    else html += '建議複習：' + Object.keys(missed).map(function (lv) {
+      return '<a href="#' + levelLesson[lv] + '">' + levels[lv] + ' 對應的課程</a>';
+    }).join('、') + '。';
+    sum.innerHTML = html; sum.hidden = false;
+    markDone('quiz');
   }
   $('#quizReset').addEventListener('click', renderQuiz);
   renderQuiz();
 
   /* ---------- Prompt builder ---------- */
   var STORE = 'ptcf-builder-v1';
-  var form = $('#bForm'), out = $('#out');
+  var form = $('#bForm'), out = $('#out'), notice = $('#bNotice');
   var state = { level: 1, outMode: 'md', f: {} };
+  var levelHints = {
+    1: '適合低風險、目標明確的日常任務，例如寫自介、翻譯、整理重點。',
+    2: '適合需要指定分析深度與推理方式的任務，例如架構設計、深度研究。',
+    3: '適合要拍板的決策，例如技術選型、投資判斷；會加入方案比較、壓力測試與自我檢查。'
+  };
   var presets = {
     linkedin: { level: 1, f: {
       role: '品牌顧問', task: '撰寫專業的 LinkedIn 自我介紹',
@@ -723,15 +1001,22 @@ Format：
   function lines(s) { return String(s || '').split('\n').map(function (x) { return x.trim(); }).filter(Boolean); }
   function list(s) { return String(s || '').split(/[、,，\n]/).map(function (x) { return x.trim(); }).filter(Boolean); }
   function v(k) { return (state.f[k] || '').trim(); }
+  function save() { store(STORE, { level: state.level, f: state.f }); }
 
-  function save() { try { localStorage.setItem(STORE, JSON.stringify({ level: state.level, f: state.f })); } catch (e) {} }
-  function load() {
-    try {
-      var raw = localStorage.getItem(STORE);
-      if (raw) { var d = JSON.parse(raw); if (d && d.f) { state.level = d.level || 1; state.f = d.f; return true; } }
-    } catch (e) {}
-    return false;
+  var noticeTimer;
+  function showNotice(text, actionLabel, action) {
+    clearTimeout(noticeTimer);
+    notice.innerHTML = '';
+    notice.appendChild(document.createTextNode(text));
+    if (actionLabel) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'linklike'; b.textContent = actionLabel;
+      b.addEventListener('click', function () { action(); hideNotice(); });
+      notice.appendChild(b);
+    }
+    notice.hidden = false;
+    noticeTimer = setTimeout(hideNotice, 6000);
   }
+  function hideNotice() { notice.hidden = true; }
 
   function buildJSON() {
     var o = { version: '3.0' };
@@ -781,22 +1066,28 @@ Format：
     if (o.decision) s.push('## Decision\n請提供：\n' + o.decision.items.map(function (t, i) { return (i + 1) + '. ' + t; }).join('\n'));
     if (o.stress_test) s.push('## Stress Test\n' + o.stress_test.questions.map(function (t) { return '- ' + t; }).join('\n'));
     if (o.self_check) s.push('## Self-check\n輸出前請確認：\n' + o.self_check.items.map(function (t) { return '- ' + t; }).join('\n'));
-    return s.length ? s.join('\n\n') : '（在左側填入欄位，或載入一個範例）';
+    return s.join('\n\n');
   }
+
+  function isEmpty() { return Object.keys(buildJSON()).length === 1; }
+  function outputText() { return state.outMode === 'json' ? JSON.stringify(buildJSON(), null, 2) : buildMD(); }
 
   function render() {
     $$('.seg button', form).forEach(function (b) { b.setAttribute('aria-pressed', String(Number(b.dataset.level) === state.level)); });
     $$('fieldset[data-min-level]', form).forEach(function (fs) { fs.hidden = Number(fs.dataset.minLevel) > state.level; });
-    $$('.out-tabs button').forEach(function (b) {
+    $('#levelHint').textContent = levelHints[state.level];
+    $$('#outTabs [role="tab"]').forEach(function (b) {
       var on = b.dataset.out === state.outMode;
-      b.classList.toggle('primary', on); b.setAttribute('aria-selected', String(on));
+      b.classList.toggle('primary', on); b.setAttribute('aria-selected', String(on)); b.tabIndex = on ? 0 : -1;
     });
-    out.textContent = state.outMode === 'json' ? JSON.stringify(buildJSON(), null, 2) : buildMD();
+    out.setAttribute('aria-labelledby', 'tab-' + state.outMode);
+    var empty = isEmpty();
+    out.textContent = empty ? '（在左側填入欄位，或載入一個範例）' : outputText();
+    $('#copyBtn').disabled = empty; $('#downloadBtn').disabled = empty;
+    $('#downloadBtn').textContent = '下載 .' + (state.outMode === 'json' ? 'json' : 'md');
   }
 
-  function fillForm() {
-    $$('[data-k]', form).forEach(function (el) { el.value = state.f[el.dataset.k] || ''; });
-  }
+  function fillForm() { $$('[data-k]', form).forEach(function (el) { el.value = state.f[el.dataset.k] || ''; }); }
 
   $$('[data-k]', form).forEach(function (el) {
     el.addEventListener('input', function () { state.f[el.dataset.k] = el.value; save(); render(); });
@@ -805,43 +1096,52 @@ Format：
     b.addEventListener('click', function () {
       state.level = Number(b.dataset.level);
       if (state.level === 3) {
-        Object.keys(level3Defaults).forEach(function (k) { if (!v(k)) state.f[k] = level3Defaults[k]; });
-        fillForm();
+        var filled = Object.keys(level3Defaults).filter(function (k) { return !v(k); });
+        filled.forEach(function (k) { state.f[k] = level3Defaults[k]; });
+        if (filled.length) { fillForm(); showNotice('已填入 Level 3 建議項目，可以直接修改。'); }
       }
       save(); render();
     });
   });
   $$('[data-preset]', form).forEach(function (b) {
     b.addEventListener('click', function () {
+      var prev = { level: state.level, f: JSON.parse(JSON.stringify(state.f)) };
       var p = presets[b.dataset.preset];
-      if (p) { state.level = p.level; state.f = JSON.parse(JSON.stringify(p.f)); }
-      else { state.level = 1; state.f = {}; }
+      if (p) {
+        state.level = p.level; state.f = JSON.parse(JSON.stringify(p.f));
+        showNotice('已載入範例「' + b.textContent + '」。', '復原', restore);
+      } else {
+        state.level = 1; state.f = {};
+        showNotice('已清空所有欄位。', '復原', restore);
+      }
+      function restore() { state.level = prev.level; state.f = prev.f; fillForm(); save(); render(); }
       fillForm(); save(); render();
     });
   });
-  $$('.out-tabs button').forEach(function (b) {
-    b.addEventListener('click', function () { state.outMode = b.dataset.out; render(); });
-  });
+  function selectOut(i) { state.outMode = i === 1 ? 'json' : 'md'; render(); }
+  $$('#outTabs [role="tab"]').forEach(function (b, i) { b.addEventListener('click', function () { selectOut(i); }); });
+  arrowTabs($('#outTabs'), selectOut);
 
   var copiedTimer;
   $('#copyBtn').addEventListener('click', function () {
-    var text = out.textContent;
-    function done() {
+    copyText(outputText(), function () {
       var c = $('#copied'); c.hidden = false;
       clearTimeout(copiedTimer); copiedTimer = setTimeout(function () { c.hidden = true; }, 1500);
-    }
-    function fallback() {
-      var ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', '');
-      ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select();
-      try { document.execCommand('copy'); done(); } catch (e) {}
-      document.body.removeChild(ta);
-    }
-    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fallback);
-    else fallback();
+    });
+  });
+  $('#downloadBtn').addEventListener('click', function () {
+    var json = state.outMode === 'json';
+    var blob = new Blob([outputText() + '\n'], { type: json ? 'application/json' : 'text/markdown' });
+    var url = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = 'prompt.' + (json ? 'json' : 'md');
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   });
 
-  if (!load()) { state.level = presets.api.level; state.f = JSON.parse(JSON.stringify(presets.api.f)); }
-  fillForm(); render();
+  var saved = store(STORE);
+  if (saved && saved.f) { state.level = saved.level || 1; state.f = saved.f; }
+  else { state.level = presets.api.level; state.f = JSON.parse(JSON.stringify(presets.api.f)); }
+  fillForm(); render(); onScroll();
 })();
 </script>
 </body>
