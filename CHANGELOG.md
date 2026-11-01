@@ -17,6 +17,7 @@
 - [Agent 與 Context Engineering](docs/06-agent-context-engineering.md)：給 AI 代理的任務寫法、專案說明檔、工具脈絡與護欄。
 - [評估與迭代](docs/07-evaluation-iteration.md)：成功標準、測試案例、評分表、LLM-as-judge、版本比較。
 - [與 AI 協作開發流程](docs/08-ai-dev-workflow.md)：從想法到 PR 的完整流程與護欄清單。
+- [互動式教學頁](tutorial/)：分課講解四層架構、選層小測驗、Prompt 產生器（輸出符合 prompt-template.json 的 JSON）。
 
 **觀念更新**
 

@@ -1,0 +1,848 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PTCF 互動教學</title>
+<meta name="description" content="Prompt Guide v3.0 互動教學：用 Persona × Task × Context × Format 四層架構寫出高品質 prompt，附選層測驗與 Prompt 產生器。">
+<style>
+:root {
+  --bg: #fafaf8;
+  --surface: #ffffff;
+  --surface-2: #f2f1ed;
+  --text: #1f2328;
+  --muted: #5d6470;
+  --border: #e2e0da;
+  --accent: #2f5fd0;
+  --accent-soft: #e6edfb;
+  --good: #1f7a4d;
+  --good-soft: #e3f3ea;
+  --bad: #b3261e;
+  --bad-soft: #fbe7e5;
+  --l1: #2f5fd0;
+  --l2: #7a4fd0;
+  --l3: #c0612b;
+  --l4: #1f7a4d;
+  --code-bg: #f4f3ef;
+  --shadow: 0 1px 2px rgba(0,0,0,.05), 0 2px 8px rgba(0,0,0,.04);
+  --radius: 10px;
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  --mono: ui-monospace, "SFMono-Regular", Consolas, "Noto Sans Mono CJK TC", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15171a;
+    --surface: #1d2024;
+    --surface-2: #25292e;
+    --text: #e6e8eb;
+    --muted: #a0a7b1;
+    --border: #33383f;
+    --accent: #7ea2f5;
+    --accent-soft: #1f2a44;
+    --good: #5cc28e;
+    --good-soft: #17301f;
+    --bad: #f08a80;
+    --bad-soft: #3a1d1b;
+    --l1: #7ea2f5;
+    --l2: #b499f0;
+    --l3: #ef9c69;
+    --l4: #5cc28e;
+    --code-bg: #23272c;
+    --shadow: none;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15171a; --surface: #1d2024; --surface-2: #25292e; --text: #e6e8eb; --muted: #a0a7b1;
+  --border: #33383f; --accent: #7ea2f5; --accent-soft: #1f2a44; --good: #5cc28e; --good-soft: #17301f;
+  --bad: #f08a80; --bad-soft: #3a1d1b; --l1: #7ea2f5; --l2: #b499f0; --l3: #ef9c69; --l4: #5cc28e;
+  --code-bg: #23272c; --shadow: none;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font-family: var(--font); font-size: 16px; line-height: 1.75;
+  -webkit-text-size-adjust: 100%;
+}
+a { color: var(--accent); }
+h1, h2, h3 { line-height: 1.35; }
+h2 { font-size: 1.6rem; margin: 0 0 .25rem; }
+h3 { font-size: 1.15rem; margin: 1.6rem 0 .5rem; }
+p { margin: .5rem 0 1rem; }
+code { font-family: var(--mono); font-size: .9em; background: var(--code-bg); padding: .1em .35em; border-radius: 4px; }
+pre {
+  font-family: var(--mono); font-size: .88rem; line-height: 1.6;
+  background: var(--code-bg); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 14px 16px; overflow-x: auto; white-space: pre-wrap; word-break: break-word; margin: .75rem 0 1rem;
+}
+table { width: 100%; border-collapse: collapse; margin: .75rem 0 1.25rem; font-size: .95rem; }
+th, td { border-bottom: 1px solid var(--border); padding: 8px 10px; text-align: left; vertical-align: top; }
+th { background: var(--surface-2); font-weight: 600; }
+.table-wrap { overflow-x: auto; }
+button { font: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Layout */
+.topbar {
+  position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px; background: var(--surface); border-bottom: 1px solid var(--border);
+}
+.brand { font-weight: 700; text-decoration: none; color: var(--text); white-space: nowrap; }
+.brand span { color: var(--accent); }
+.topbar .spacer { flex: 1; }
+.topbar a.home { font-size: .9rem; white-space: nowrap; }
+.menu-btn {
+  display: none; border: 1px solid var(--border); background: var(--surface-2); color: var(--text);
+  border-radius: 8px; padding: 4px 12px; white-space: nowrap;
+}
+.layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); max-width: 1180px; margin: 0 auto; }
+nav.toc {
+  position: sticky; top: 57px; align-self: start; height: calc(100vh - 57px); overflow-y: auto;
+  padding: 24px 12px 24px 16px; border-right: 1px solid var(--border);
+}
+nav.toc ol { list-style: none; margin: 0; padding: 0; }
+nav.toc a {
+  display: block; padding: 6px 10px; border-radius: 8px; text-decoration: none; color: var(--muted); font-size: .95rem;
+}
+nav.toc a:hover { background: var(--surface-2); color: var(--text); }
+nav.toc a.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+main { padding: 32px 40px 80px; min-width: 0; }
+section.lesson { padding: 28px 0 36px; border-bottom: 1px solid var(--border); }
+section.lesson:last-child { border-bottom: 0; }
+.eyebrow { font-size: .8rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.lead { font-size: 1.1rem; color: var(--muted); }
+
+/* Hero */
+.hero h1 { font-size: 2.1rem; margin: .25rem 0 .5rem; }
+.formula {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 1.25rem 0;
+  font-size: 1.1rem; font-weight: 600;
+}
+.formula .chip { padding: 6px 14px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+.formula .op { color: var(--muted); }
+
+/* Cards */
+.grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin: 1rem 0; }
+.card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 14px 16px; box-shadow: var(--shadow);
+}
+.card h4 { margin: 0 0 .25rem; font-size: 1rem; }
+.card p { margin: 0; color: var(--muted); font-size: .93rem; }
+a.card { text-decoration: none; color: var(--text); }
+a.card:hover { border-color: var(--accent); }
+.layer-card { border-left: 4px solid var(--c, var(--accent)); }
+.layer-card .lv { font-size: .78rem; font-weight: 700; color: var(--c, var(--accent)); }
+
+/* Tabs (four elements) */
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 1rem 0 0; }
+.tab {
+  border: 1px solid var(--border); background: var(--surface); color: var(--text);
+  border-radius: 999px; padding: 6px 16px;
+}
+.tab[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.tab-panel { margin-top: 12px; }
+
+/* Compare */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 1rem 0; }
+.compare .col { border-radius: var(--radius); padding: 12px 14px; border: 1px solid var(--border); }
+.compare .bad { background: var(--bad-soft); }
+.compare .good { background: var(--good-soft); }
+.compare .label { font-weight: 700; font-size: .9rem; }
+.compare .bad .label { color: var(--bad); }
+.compare .good .label { color: var(--good); }
+.compare pre { background: transparent; border: 0; padding: 4px 0 0; margin: 0; }
+
+/* Stepper */
+.stepper { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+.steps-bar { display: flex; gap: 4px; margin-bottom: 12px; }
+.steps-bar span { flex: 1; height: 6px; border-radius: 3px; background: var(--surface-2); }
+.steps-bar span.on { background: var(--l3); }
+.step-title { font-weight: 700; font-size: 1.05rem; }
+.step-body { color: var(--muted); min-height: 3.5em; }
+.step-nav { display: flex; gap: 8px; justify-content: space-between; align-items: center; margin-top: 8px; }
+.btn {
+  border: 1px solid var(--border); background: var(--surface-2); color: var(--text);
+  border-radius: 8px; padding: 6px 14px;
+}
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn:disabled { opacity: .45; cursor: default; }
+.btn.small { padding: 3px 10px; font-size: .88rem; }
+
+/* Callout */
+.callout {
+  border-left: 4px solid var(--accent); background: var(--accent-soft);
+  padding: 10px 14px; border-radius: 0 var(--radius) var(--radius) 0; margin: 1rem 0;
+}
+.callout strong { color: var(--accent); }
+
+/* Quiz */
+.quiz-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; margin: 10px 0; }
+.quiz-q { font-weight: 600; margin-bottom: 8px; }
+.quiz-opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.quiz-opt { border: 1px solid var(--border); background: var(--surface-2); color: var(--text); border-radius: 8px; padding: 5px 12px; }
+.quiz-opt.correct { background: var(--good-soft); border-color: var(--good); color: var(--good); font-weight: 600; }
+.quiz-opt.wrong { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); }
+.quiz-fb { margin-top: 8px; font-size: .93rem; color: var(--muted); }
+.quiz-score { font-weight: 700; }
+
+/* Builder */
+.builder { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+.builder-form, .builder-out { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+.builder-out { position: sticky; top: 72px; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 12px; flex-wrap: wrap; }
+.seg button { border: 0; background: var(--surface); color: var(--text); padding: 6px 12px; border-right: 1px solid var(--border); }
+.seg button:last-child { border-right: 0; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+.presets { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px; align-items: center; }
+.presets .lbl { font-size: .88rem; color: var(--muted); }
+fieldset { border: 0; padding: 0; margin: 0 0 8px; }
+legend { font-weight: 700; font-size: .85rem; letter-spacing: .04em; padding: 0; margin: 10px 0 4px; }
+legend.l1 { color: var(--l1); } legend.l2 { color: var(--l2); } legend.l3 { color: var(--l3); }
+label { display: block; font-size: .88rem; color: var(--muted); margin: 8px 0 3px; }
+input[type="text"], textarea {
+  width: 100%; font: inherit; font-size: .95rem; color: var(--text); background: var(--bg);
+  border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px;
+}
+textarea { min-height: 64px; resize: vertical; line-height: 1.55; }
+.hint { font-size: .8rem; color: var(--muted); }
+.out-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.out-tabs { display: flex; gap: 6px; }
+#out { max-height: 62vh; overflow: auto; margin: 0; }
+.copied { color: var(--good); font-size: .85rem; }
+[hidden] { display: none !important; }
+
+footer { color: var(--muted); font-size: .9rem; padding-top: 24px; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  .menu-btn { display: inline-block; }
+  nav.toc {
+    display: none; position: fixed; top: 53px; left: 0; right: 0; height: auto; max-height: 70vh;
+    background: var(--surface); border-right: 0; border-bottom: 1px solid var(--border); z-index: 19; padding: 8px 16px 12px;
+  }
+  nav.toc.open { display: block; }
+  main { padding: 16px 16px 64px; }
+  .builder { grid-template-columns: minmax(0, 1fr); }
+  .builder-out { position: static; }
+  .compare { grid-template-columns: minmax(0, 1fr); }
+  .hero h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.35rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="toc">目錄</button>
+  <a class="brand" href="#start">PTCF <span>互動教學</span></a>
+  <div class="spacer"></div>
+  <a class="home" href="../">← 回 Prompt Guide 首頁</a>
+</header>
+
+<div class="layout">
+  <nav class="toc" id="toc" aria-label="章節目錄">
+    <ol>
+      <li><a href="#start">開始：一句話公式</a></li>
+      <li><a href="#l1">Lesson 1　四要素</a></li>
+      <li><a href="#l2">Lesson 2　進階控制</a></li>
+      <li><a href="#l3">Lesson 3　決策閉環</a></li>
+      <li><a href="#l4">Lesson 4　模板與評估</a></li>
+      <li><a href="#modern">現代技巧速覽</a></li>
+      <li><a href="#quiz">選層小測驗</a></li>
+      <li><a href="#builder">Prompt 產生器</a></li>
+      <li><a href="#more">延伸閱讀</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+  <!-- 開始 -->
+  <section class="lesson hero" id="start">
+    <div class="eyebrow">Prompt Guide v3.0</div>
+    <h1>控制思考，而不只是控制輸出</h1>
+    <p class="lead">用 30 分鐘學會一套分層的 prompt 寫法：日常任務四行搞定，重要決策有完整閉環。</p>
+
+    <div class="formula" aria-label="有效輸出等於 Persona 乘 Task 乘 Context 乘 Format">
+      <span>有效輸出 =</span>
+      <span class="chip">Persona</span><span class="op">×</span>
+      <span class="chip">Task</span><span class="op">×</span>
+      <span class="chip">Context</span><span class="op">×</span>
+      <span class="chip">Format</span>
+    </div>
+
+    <p>四項是<strong>相乘</strong>關係：任何一項空白，輸出品質都會明顯下降。最常被省略、也最影響結果的是 Context。</p>
+
+    <h3>四層架構：依任務價值往上加</h3>
+    <div class="grid">
+      <div class="card layer-card" style="--c: var(--l1)"><div class="lv">LEVEL 1｜核心層</div><h4>Persona・Task・Context・Format</h4><p>約 80% 的日常任務只需要這層。</p></div>
+      <div class="card layer-card" style="--c: var(--l2)"><div class="lv">LEVEL 2｜進階控制</div><h4>Depth・Reasoning Mode・Constraint</h4><p>想多深、怎麼想、邊界在哪。</p></div>
+      <div class="card layer-card" style="--c: var(--l3)"><div class="lv">LEVEL 3｜決策與驗證</div><h4>Decision・Stress Test・Self-check</h4><p>從分析走到可以拍板的結論。</p></div>
+      <div class="card layer-card" style="--c: var(--l4)"><div class="lv">LEVEL 4｜模板與知識</div><h4>模板庫・Output SLA</h4><p>每次都寫好，別人也能用。</p></div>
+    </div>
+
+    <h3>30 秒範本</h3>
+<pre>Persona：你是一位【角色】，讀者是【對象】
+Task：請【動詞 + 具體目標】
+Context：背景【…】；目標【…】；限制【…，因為…】
+Format：【條列 / 表格 / Markdown】，【長度】
+
+&lt;document&gt;
+（要處理的資料）
+&lt;/document&gt;</pre>
+  </section>
+
+  <!-- Lesson 1 -->
+  <section class="lesson" id="l1">
+    <div class="eyebrow" style="color: var(--l1)">Lesson 1</div>
+    <h2>四要素：把 prompt 寫完整</h2>
+    <p>點選下方每個要素，看看它控制什麼、怎麼寫。</p>
+
+    <div class="tabs" role="tablist" id="ptcfTabs"></div>
+    <div class="tab-panel card" id="ptcfPanel" role="tabpanel"></div>
+
+    <h3>前後對照：同一個需求，兩種寫法</h3>
+    <div class="compare">
+      <div class="col bad">
+        <div class="label">✗ 模糊的 prompt</div>
+<pre>幫我重構這段程式碼。</pre>
+        <p class="hint">模型不知道語言、問題在哪、要改到什麼程度、要什麼形式的結果，只能猜。</p>
+      </div>
+      <div class="col good">
+        <div class="label">✓ PTCF prompt</div>
+<pre>Persona：資深後端架構師
+
+Task：
+1. 分析下方 Controller 的問題
+2. 提出重構建議並附重構後程式碼
+
+Context：
+- Java Spring Boot 專案
+- Controller 超過 800 行，同時處理驗證、
+  業務邏輯與資料存取
+- 目標是提升可維護性與可測試性
+
+Format：
+- 條列問題分析（標註違反的設計原則）
+- 重構前後對照
+
+&lt;code&gt;（貼上程式碼）&lt;/code&gt;</pre>
+      </div>
+    </div>
+    <div class="callout"><strong>小提醒：</strong>Persona 主要影響用語與觀點，不保證答案更正確。事實正確性靠的是 Context（提供資料）與 Level 3 的驗證。</div>
+  </section>
+
+  <!-- Lesson 2 -->
+  <section class="lesson" id="l2">
+    <div class="eyebrow" style="color: var(--l2)">Lesson 2</div>
+    <h2>進階控制：想多深、怎麼想、邊界在哪</h2>
+
+    <div class="table-wrap"><table>
+      <thead><tr><th>模組</th><th>控制的是</th><th>寫法範例</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Depth</strong></td><td>洞察深度</td><td>「請分析到系統設計層，並評估可擴展性；讀者有 3 年經驗。」</td></tr>
+        <tr><td><strong>Reasoning Mode</strong></td><td>推理方式</td><td>Few-shot、Chain of Thought、First Principles、Scenario Simulation</td></tr>
+        <tr><td><strong>Constraint</strong></td><td>邊界條件</td><td>「不使用商業資料庫，因為授權費超出預算。」</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>推理模型時代：還要寫「請逐步思考」嗎？</h3>
+    <p>多數主流模型會在回答前自行思考。對這類模型，把力氣花在說清楚<strong>目標、判準與理由</strong>；需要更深入時，調高思考強度或寫「請仔細考慮邊界情況」。只有一般模型、或你需要看到推理過程時，才明確要求：</p>
+<pre>請先在 &lt;thinking&gt; 中列出推理步驟，再在 &lt;answer&gt; 中給出結論。</pre>
+
+    <h3>限制要附理由，不要加重語氣</h3>
+    <div class="compare">
+      <div class="col bad">
+        <div class="label">✗ 加重語氣</div>
+<pre>嚴禁使用簡體字！！</pre>
+        <p class="hint">新一代模型對指令很敏感，過度強調可能讓它在不相關的地方也過度套用。</p>
+      </div>
+      <div class="col good">
+        <div class="label">✓ 附上理由</div>
+<pre>請使用繁體中文與台灣慣用術語，
+因為讀者在台灣。</pre>
+        <p class="hint">模型理解原因後，能推廣到沒列出的情況，例如用詞習慣。</p>
+      </div>
+    </div>
+
+    <h3>Few-shot：範例要多樣，並用標籤包住</h3>
+<pre>&lt;examples&gt;
+&lt;example&gt;
+&lt;input&gt;if (x == 'active') { doA(); } else { doB(); }&lt;/input&gt;
+&lt;output&gt;改用對照表或策略模式取代多重 if-else。&lt;/output&gt;
+&lt;/example&gt;
+&lt;/examples&gt;</pre>
+  </section>
+
+  <!-- Lesson 3 -->
+  <section class="lesson" id="l3">
+    <div class="eyebrow" style="color: var(--l3)">Lesson 3</div>
+    <h2>決策閉環：從分析走到結論</h2>
+    <p>只有分析、沒有結論的回答，常見症狀是「各有優缺點，視情況而定」。用 8 步驟把它變成可以拍板的報告：</p>
+
+    <div class="stepper" id="stepper" aria-live="polite">
+      <div class="steps-bar" id="stepsBar"></div>
+      <div class="step-title" id="stepTitle"></div>
+      <div class="step-body" id="stepBody"></div>
+      <div class="step-nav">
+        <button class="btn" id="stepPrev">← 上一步</button>
+        <span class="hint" id="stepCount"></span>
+        <button class="btn primary" id="stepNext">下一步 →</button>
+      </div>
+    </div>
+
+    <h3>Stress Test：這個結論在哪裡會崩？</h3>
+    <div class="grid">
+      <div class="card"><h4>規模</h4><p>若流量成長 10 倍，哪裡先成為瓶頸？</p></div>
+      <div class="card"><h4>假設</h4><p>哪些假設可能是錯的？錯了會怎樣？</p></div>
+      <div class="card"><h4>最壞情境</h4><p>最壞情況是什麼？如何止損？</p></div>
+      <div class="card"><h4>反方</h4><p>最強的反對意見是什麼？</p></div>
+    </div>
+    <p><strong>思維壓縮測試：</strong>請模型把結論濃縮成 150 字、30 字、一句話。一句話說不清楚，代表結論本身還不夠明確。</p>
+
+    <h3>Self-check 的限制</h3>
+    <div class="callout">同一次回答中的自我檢查效果有限，模型常會「確認」自己的答案。重要決策建議<strong>另開一次對話</strong>，請模型以審查者身份批評，或交由人工審核。</div>
+  </section>
+
+  <!-- Lesson 4 -->
+  <section class="lesson" id="l4">
+    <div class="eyebrow" style="color: var(--l4)">Lesson 4</div>
+    <h2>模板與評估：讓好 prompt 可以重複</h2>
+    <p>先定義「什麼叫做好」，才能驗收輸出、比較 prompt 版本。Output SLA 的五個面向可以直接當評分表：</p>
+
+    <div class="table-wrap"><table>
+      <thead><tr><th>面向</th><th>1 分</th><th>3 分</th><th>5 分</th></tr></thead>
+      <tbody>
+        <tr><td><strong>清晰度</strong></td><td>讀完不知道結論</td><td>結論清楚但需重讀</td><td>一句話就能說清楚</td></tr>
+        <tr><td><strong>邏輯一致性</strong></td><td>有明顯矛盾</td><td>大致合理、有小跳躍</td><td>每個結論都由前提推得</td></tr>
+        <tr><td><strong>可執行性</strong></td><td>沒有具體建議</td><td>有建議但缺順序</td><td>有步驟、優先順序與負責人</td></tr>
+        <tr><td><strong>風險揭露</strong></td><td>沒提風險</td><td>列出風險但不完整</td><td>含最壞情境與應對</td></tr>
+        <tr><td><strong>假設透明度</strong></td><td>沒說明假設</td><td>部分假設有說明</td><td>明列假設與資料時間點</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>評估流程</h3>
+<pre>定義成功標準 → 準備 5–20 個測試案例 → 跑出輸出 → 評分 → 一次只改一個變因 → 重跑比較</pre>
+    <p>一次性的個人任務不需要這麼做；每週重複使用的 prompt、團隊共用模板與自動化流程才值得建立測試案例。</p>
+  </section>
+
+  <!-- Modern -->
+  <section class="lesson" id="modern">
+    <div class="eyebrow">與時俱進</div>
+    <h2>現代技巧速覽</h2>
+    <div class="grid">
+      <div class="card"><h4>用標籤組織 prompt</h4><p>用 <code>&lt;document&gt;</code>、<code>&lt;instructions&gt;</code> 區隔資料與指令，多份文件時更不會混淆。</p></div>
+      <div class="card"><h4>資料在前，問題在後</h4><p>長文件放開頭、Task 放最後；並要求先引用原文再回答。</p></div>
+      <div class="card"><h4>允許說不知道</h4><p>「資料中沒有答案時請直接說明」，並要求標示來源與日期，降低幻覺。</p></div>
+      <div class="card"><h4>Prompt Chaining</h4><p>大任務拆成摘要 → 分析 → 產出 → 審查，每一步都能單獨檢查。</p></div>
+      <div class="card"><h4>Meta-prompting</h4><p>把 prompt 與不滿意的輸出一起交給模型，請它指出不清楚之處並改寫。</p></div>
+      <div class="card"><h4>給 AI 代理的任務</h4><p>寫清楚目標、範圍、驗收條件與限制，並要求它列出沒驗證到的部分。</p></div>
+    </div>
+<pre>目標：匯出報表時支援 CSV 格式。
+範圍：只改 export/ 模組，不要動資料庫結構。
+驗收：現有測試全過，並新增 CSV 匯出的測試。
+限制：不新增第三方套件，因為新套件需經資安審核。
+完成後請列出你沒有驗證到的部分。</pre>
+  </section>
+
+  <!-- Quiz -->
+  <section class="lesson" id="quiz">
+    <div class="eyebrow">練習</div>
+    <h2>選層小測驗</h2>
+    <p>不要為了完整而完整。以下情境，應該啟用到哪一層？</p>
+    <div id="quizList"></div>
+    <p class="quiz-score" id="quizScore" aria-live="polite"></p>
+    <button class="btn small" id="quizReset">重新作答</button>
+  </section>
+
+  <!-- Builder -->
+  <section class="lesson" id="builder">
+    <div class="eyebrow">實作</div>
+    <h2>Prompt 產生器</h2>
+    <p>選擇層級、填入欄位，右側會即時產生 Markdown prompt 與 JSON（欄位與 <a href="../docs/templates/prompt-template.json">prompt-template.json</a> 一致）。草稿會暫存在這個瀏覽器中。</p>
+
+    <div class="builder">
+      <form class="builder-form" id="bForm" autocomplete="off" onsubmit="return false">
+        <div class="seg" role="group" aria-label="層級">
+          <button type="button" data-level="1" aria-pressed="true">Level 1</button>
+          <button type="button" data-level="2" aria-pressed="false">Level 1 + 2</button>
+          <button type="button" data-level="3" aria-pressed="false">Level 1 + 2 + 3</button>
+        </div>
+        <div class="presets">
+          <span class="lbl">載入範例：</span>
+          <button type="button" class="btn small" data-preset="linkedin">LinkedIn 自介</button>
+          <button type="button" class="btn small" data-preset="api">高流量 API</button>
+          <button type="button" class="btn small" data-preset="svn">SVN 轉 Git</button>
+          <button type="button" class="btn small" data-preset="clear">清空</button>
+        </div>
+
+        <fieldset>
+          <legend class="l1">LEVEL 1｜核心層</legend>
+          <label for="f-role">Persona 角色（多個用「、」分隔）</label>
+          <input type="text" id="f-role" data-k="role" placeholder="例如：資深系統架構師">
+          <label for="f-task">Task 任務（一行一項）</label>
+          <textarea id="f-task" data-k="task" placeholder="例如：設計可擴展的高流量 API 架構"></textarea>
+          <label for="f-background">Context 背景（含讀者是誰）</label>
+          <textarea id="f-background" data-k="background" placeholder="目前情況、技術環境或市場環境"></textarea>
+          <label for="f-goal">Context 目標</label>
+          <input type="text" id="f-goal" data-k="goal" placeholder="要達成什麼、成功標準">
+          <label for="f-constraints">Context 限制與理由（一行一項）</label>
+          <textarea id="f-constraints" data-k="constraints" placeholder="例如：使用繁體中文，因為讀者在台灣"></textarea>
+          <label for="f-data">資料（會以 &lt;document&gt; 包住）</label>
+          <textarea id="f-data" data-k="data" placeholder="貼上原始資料、程式碼或報告"></textarea>
+          <label for="f-format">Format 形式（多個用「、」分隔）</label>
+          <input type="text" id="f-format" data-k="format" placeholder="例如：條列、表格">
+          <label for="f-length">Format 長度</label>
+          <input type="text" id="f-length" data-k="length" placeholder="例如：500 字內">
+        </fieldset>
+
+        <fieldset data-min-level="2">
+          <legend class="l2">LEVEL 2｜進階控制</legend>
+          <label for="f-depth">Depth 深度（多個用「、」分隔）</label>
+          <input type="text" id="f-depth" data-k="depth" placeholder="例如：系統設計層、可擴展性分析">
+          <label for="f-reasoning">Reasoning Mode 推理方式</label>
+          <input type="text" id="f-reasoning" data-k="reasoning" placeholder="例如：先用第一性原理拆出負載特性，再推導架構">
+        </fieldset>
+
+        <fieldset data-min-level="3">
+          <legend class="l3">LEVEL 3｜決策與驗證</legend>
+          <label for="f-decision">Decision 要求（一行一項）</label>
+          <textarea id="f-decision" data-k="decision"></textarea>
+          <label for="f-stress">Stress Test 問題（一行一項）</label>
+          <textarea id="f-stress" data-k="stress"></textarea>
+          <label for="f-selfcheck">Self-check 項目（一行一項）</label>
+          <textarea id="f-selfcheck" data-k="selfcheck"></textarea>
+        </fieldset>
+      </form>
+
+      <div class="builder-out">
+        <div class="out-head">
+          <div class="out-tabs" role="tablist" aria-label="輸出格式">
+            <button type="button" class="btn small primary" data-out="md" aria-selected="true">Markdown</button>
+            <button type="button" class="btn small" data-out="json" aria-selected="false">JSON</button>
+          </div>
+          <div>
+            <span class="copied" id="copied" hidden>已複製</span>
+            <button type="button" class="btn small" id="copyBtn">複製</button>
+          </div>
+        </div>
+        <pre id="out"></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- More -->
+  <section class="lesson" id="more">
+    <div class="eyebrow">下一步</div>
+    <h2>延伸閱讀</h2>
+    <div class="grid">
+      <a class="card" href="../docs/01-core-ptcf.html"><h4>Level 1｜核心層</h4><p>四要素的完整說明與檢查清單</p></a>
+      <a class="card" href="../docs/02-advanced-control.html"><h4>Level 2｜進階控制層</h4><p>Depth、Reasoning Mode、Constraint</p></a>
+      <a class="card" href="../docs/03-decision-validation.html"><h4>Level 3｜決策與驗證層</h4><p>8 步決策閉環與完整範例</p></a>
+      <a class="card" href="../docs/04-template-system.html"><h4>Level 4｜模板與知識層</h4><p>模板庫與 Output SLA</p></a>
+      <a class="card" href="../docs/05-modern-practices.html"><h4>現代最佳實踐</h4><p>推理模型、結構化與長文件</p></a>
+      <a class="card" href="../docs/06-agent-context-engineering.html"><h4>Agent 與 Context Engineering</h4><p>給 AI 代理的任務與專案說明檔</p></a>
+      <a class="card" href="../docs/07-evaluation-iteration.html"><h4>評估與迭代</h4><p>測試案例、評分表、版本比較</p></a>
+      <a class="card" href="../docs/08-ai-dev-workflow.html"><h4>與 AI 協作開發流程</h4><p>從想法到 PR 的護欄清單</p></a>
+      <a class="card" href="../docs/templates/general.html"><h4>萬用模板</h4><p>極簡版、完整版、JSON 版</p></a>
+      <a class="card" href="../docs/templates/programming.html"><h4>程式與專案模板</h4><p>專案掃描、架構設計、重構</p></a>
+      <a class="card" href="../docs/templates/investment.html"><h4>投資分析模板</h4><p>分析類 prompt 寫法示範</p></a>
+    </div>
+    <footer>Prompt Guide v3.0 ・ <a href="https://github.com/cjw9223233/PTCF">GitHub repo</a></footer>
+  </section>
+
+  </main>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  /* ---------- Mobile menu & active section ---------- */
+  var toc = $('#toc'), menuBtn = $('#menuBtn');
+  menuBtn.addEventListener('click', function () {
+    var open = toc.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', String(open));
+  });
+  $$('#toc a').forEach(function (a) {
+    a.addEventListener('click', function () { toc.classList.remove('open'); menuBtn.setAttribute('aria-expanded', 'false'); });
+  });
+  if ('IntersectionObserver' in window) {
+    var links = {};
+    $$('#toc a').forEach(function (a) { links[a.getAttribute('href').slice(1)] = a; });
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting && links[e.target.id]) {
+          $$('#toc a').forEach(function (a) { a.classList.remove('active'); });
+          links[e.target.id].classList.add('active');
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+    $$('section.lesson').forEach(function (s) { io.observe(s); });
+  }
+
+  /* ---------- Lesson 1: PTCF tabs ---------- */
+  var ptcf = [
+    { name: 'Persona', zh: '角色', q: '用什麼身份與視角思考？', ctrl: '專業框架、用語、語氣',
+      tip: '加上「讀者是誰」往往比加上頭銜更有效。',
+      ex: '你是一位資深系統架構師，熟悉 Kubernetes 與 PostgreSQL。\n讀者是剛轉職的新手工程師。' },
+    { name: 'Task', zh: '任務', q: '要完成什麼？', ctrl: '行為方向',
+      tip: '用動詞明確說出要做什麼；多件事時編號列出，並說明為什麼要做。',
+      ex: '請完成：\n1. 分析下方 Controller 的問題\n2. 提出重構建議並附重構後程式碼' },
+    { name: 'Context', zh: '情境', q: '在什麼條件下？', ctrl: '資訊完整度',
+      tip: '回答四件事：背景、目標、限制、資料。資料用標籤和指令分開。',
+      ex: '背景：電商結帳的 legacy code\n目標：提升可測試性\n限制：不能使用商業資料庫（授權費超出預算）\n\n<document>\n（貼上原始資料）\n</document>' },
+    { name: 'Format', zh: '格式', q: '怎麼呈現？', ctrl: '可用性',
+      tip: '指定形式與長度，讓結果能直接使用。',
+      ex: '- 條列式問題分析\n- 重構前後對照表\n- 300 字內摘要' }
+  ];
+  var tabs = $('#ptcfTabs'), panel = $('#ptcfPanel');
+  function showPtcf(i) {
+    $$('.tab', tabs).forEach(function (t, j) { t.setAttribute('aria-selected', String(i === j)); });
+    var p = ptcf[i];
+    panel.innerHTML = '<h4>' + p.name + '（' + p.zh + '）</h4>' +
+      '<p><strong>核心問題：</strong>' + p.q + '　<strong>控制的是：</strong>' + p.ctrl + '</p>' +
+      '<p>' + p.tip + '</p><pre>' + esc(p.ex) + '</pre>';
+  }
+  ptcf.forEach(function (p, i) {
+    var b = document.createElement('button');
+    b.className = 'tab'; b.type = 'button'; b.setAttribute('role', 'tab');
+    b.textContent = p.name + '・' + p.zh;
+    b.addEventListener('click', function () { showPtcf(i); });
+    tabs.appendChild(b);
+  });
+  showPtcf(0);
+
+  /* ---------- Lesson 3: stepper ---------- */
+  var steps = [
+    ['問題定義', '要決定的到底是什麼？成功標準是什麼？'],
+    ['方案生成', '至少 2–3 種，包含「維持現狀」作為比較基準。'],
+    ['優缺點比較', '用一致的評估面向比較：成本、風險、時程、可維護性。'],
+    ['風險評估', '每個方案的主要風險與發生機率。'],
+    ['推薦方案', '明確選一個並說明理由；資訊不足時，說明還缺什麼。'],
+    ['實作優先順序', '第一步做什麼、什麼可以延後。'],
+    ['壓力測試', '挑戰結論：規模、假設、最壞情境、反方意見。'],
+    ['自我檢查', '推理有沒有跳躍？關鍵主張有沒有資料支持？有沒有更簡單的做法？']
+  ];
+  var si = 0, bar = $('#stepsBar');
+  steps.forEach(function () { bar.appendChild(document.createElement('span')); });
+  function renderStep() {
+    $$('span', bar).forEach(function (s, j) { s.classList.toggle('on', j <= si); });
+    $('#stepTitle').textContent = (si + 1) + '. ' + steps[si][0];
+    $('#stepBody').textContent = steps[si][1];
+    $('#stepCount').textContent = (si + 1) + ' / ' + steps.length;
+    $('#stepPrev').disabled = si === 0;
+    $('#stepNext').disabled = si === steps.length - 1;
+  }
+  $('#stepPrev').addEventListener('click', function () { if (si > 0) { si--; renderStep(); } });
+  $('#stepNext').addEventListener('click', function () { if (si < steps.length - 1) { si++; renderStep(); } });
+  renderStep();
+
+  /* ---------- Quiz ---------- */
+  var levels = ['Level 1', 'Level 1 + 2', 'Level 1 + 2 + 3'];
+  var quiz = [
+    { q: '把一封英文 email 翻譯成中文。', a: 0, why: '低風險、目標明確，四要素寫清楚就夠了。' },
+    { q: '設計一個每日 100 萬請求的 API 架構。', a: 1, why: '需要指定分析深度（系統設計層、可擴展性）與限制條件，但不一定要做決策閉環。' },
+    { q: '決定 30 人團隊是否從 SVN 轉到 Git。', a: 2, why: '這是要拍板的決策，需要方案比較、風險評估、推薦與壓力測試。' },
+    { q: '整理一份會議紀錄的重點與待辦。', a: 0, why: '日常整理任務；提供會議紀錄（Context）並指定格式即可。' },
+    { q: '評估是否在明年投入新產品線，寫成給主管的建議。', a: 2, why: '高價值決策，需要明確推薦、最壞情境與假設透明度。' }
+  ];
+  var answered = {};
+  function renderQuiz() {
+    var list = $('#quizList'); list.innerHTML = ''; answered = {};
+    quiz.forEach(function (item, qi) {
+      var div = document.createElement('div'); div.className = 'quiz-item';
+      div.innerHTML = '<div class="quiz-q">' + (qi + 1) + '. ' + esc(item.q) + '</div><div class="quiz-opts"></div><div class="quiz-fb" aria-live="polite"></div>';
+      var opts = $('.quiz-opts', div), fb = $('.quiz-fb', div);
+      levels.forEach(function (lv, li) {
+        var b = document.createElement('button'); b.type = 'button'; b.className = 'quiz-opt'; b.textContent = lv;
+        b.addEventListener('click', function () {
+          if (answered[qi] !== undefined) return;
+          answered[qi] = li === item.a;
+          $$('.quiz-opt', opts).forEach(function (o, oi) {
+            o.disabled = true;
+            if (oi === item.a) o.classList.add('correct');
+            else if (oi === li) o.classList.add('wrong');
+          });
+          fb.textContent = (li === item.a ? '✓ 答對了。' : '✗ 建議是 ' + levels[item.a] + '。') + item.why;
+          updateScore();
+        });
+        opts.appendChild(b);
+      });
+      list.appendChild(div);
+    });
+    updateScore();
+  }
+  function updateScore() {
+    var keys = Object.keys(answered), ok = keys.filter(function (k) { return answered[k]; }).length;
+    $('#quizScore').textContent = keys.length === quiz.length ? '得分：' + ok + ' / ' + quiz.length + (ok === quiz.length ? '，全對！' : '') : '';
+  }
+  $('#quizReset').addEventListener('click', renderQuiz);
+  renderQuiz();
+
+  /* ---------- Prompt builder ---------- */
+  var STORE = 'ptcf-builder-v1';
+  var form = $('#bForm'), out = $('#out');
+  var state = { level: 1, outMode: 'md', f: {} };
+  var presets = {
+    linkedin: { level: 1, f: {
+      role: '品牌顧問', task: '撰寫專業的 LinkedIn 自我介紹',
+      background: '10 年後端經驗，擅長架構設計', goal: '爭取技術主管職',
+      constraints: '使用繁體中文，因為主要讀者是台灣的招募者', data: '',
+      format: '段落', length: '150 字內，專業但不生硬',
+      depth: '', reasoning: '', decision: '', stress: '', selfcheck: '' } },
+    api: { level: 2, f: {
+      role: '資深系統架構師', task: '設計可擴展的高流量 API 架構',
+      background: '每日 100 萬請求，尖峰為平均的 5 倍；部署於 Kubernetes，資料庫為 PostgreSQL',
+      goal: '提供可水平擴展、成本可控的架構方案',
+      constraints: '成本需控制，因為新創預算有限\n不使用商業資料庫，因為授權費超出預算', data: '',
+      format: '架構圖（Mermaid）、條列說明', length: '',
+      depth: '系統設計層、可擴展性分析', reasoning: '先用第一性原理拆出負載特性，再推導架構',
+      decision: '', stress: '', selfcheck: '' } },
+    svn: { level: 3, f: {
+      role: '資深架構師、專案經理', task: '提出版本控制升級方案並完成決策',
+      background: '30 人團隊，目前使用 SVN', goal: '導入 Git 並支援 CI/CD',
+      constraints: '多數成員不熟 Git\n遷移期間不能中斷發版',
+      data: '現有 SVN 儲存庫結構、CI/CD 需求、團隊技術能力',
+      format: '比較表、建議方案', length: '',
+      depth: '結構性分析', reasoning: '',
+      decision: '可行方案（至少 3 種，含維持 SVN）\n優缺點比較（學習成本、工具整合、遷移風險、時程）\n風險評估\n推薦方案與理由\n實作優先順序',
+      stress: '若團隊不熟 Git，可能發生什麼問題？\n遷移過程如何確保歷史紀錄不遺失？\n哪裡可能成為技術債？\n最壞情境是什麼？',
+      selfcheck: '是否有推理漏洞與未說明的假設？' } }
+  };
+  var level3Defaults = {
+    decision: '可行方案（至少 2–3 種）\n優缺點比較\n風險評估\n推薦方案與理由；資訊不足時說明還缺什麼\n實作優先順序',
+    stress: '哪些假設可能錯誤？\n最強的反對意見是什麼？\n最壞情境是什麼？',
+    selfcheck: '是否有推理跳躍？\n關鍵主張是否有資料支持？\n是否有更簡單的做法？'
+  };
+
+  function lines(s) { return String(s || '').split('\n').map(function (x) { return x.trim(); }).filter(Boolean); }
+  function list(s) { return String(s || '').split(/[、,，\n]/).map(function (x) { return x.trim(); }).filter(Boolean); }
+  function v(k) { return (state.f[k] || '').trim(); }
+
+  function save() { try { localStorage.setItem(STORE, JSON.stringify({ level: state.level, f: state.f })); } catch (e) {} }
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORE);
+      if (raw) { var d = JSON.parse(raw); if (d && d.f) { state.level = d.level || 1; state.f = d.f; return true; } }
+    } catch (e) {}
+    return false;
+  }
+
+  function buildJSON() {
+    var o = { version: '3.0' };
+    var role = list(v('role')); if (role.length) o.role = role;
+    var task = lines(v('task')); if (task.length) o.task = { items: task };
+    var ctx = {};
+    if (v('background')) ctx.background = v('background');
+    if (v('goal')) ctx.goal = v('goal');
+    var cons = lines(v('constraints')); if (cons.length) ctx.constraints = cons;
+    if (v('data')) ctx.data = v('data');
+    if (Object.keys(ctx).length) o.context = ctx;
+    var fmt = {}; var ft = list(v('format')); if (ft.length) fmt.type = ft; if (v('length')) fmt.length = v('length');
+    if (Object.keys(fmt).length) o.format = fmt;
+    if (state.level >= 2) {
+      var dp = list(v('depth')); if (dp.length) o.depth = dp;
+      if (v('reasoning')) o.reasoning_mode = v('reasoning');
+    }
+    if (state.level >= 3) {
+      var de = lines(v('decision')); if (de.length) o.decision = { items: de };
+      var st = lines(v('stress')); if (st.length) o.stress_test = { questions: st };
+      var sc = lines(v('selfcheck')); if (sc.length) o.self_check = { items: sc };
+    }
+    return o;
+  }
+
+  function buildMD() {
+    var o = buildJSON(), s = [];
+    if (o.role) s.push('## Persona\n你是一位' + o.role[0] + (o.role.length > 1 ? '，兼具' + o.role.slice(1).join('、') + '的視角' : '') + '。');
+    if (o.task) s.push('## Task\n請完成：\n' + o.task.items.map(function (t, i) { return (i + 1) + '. ' + t; }).join('\n'));
+    if (o.context) {
+      var c = [];
+      if (o.context.background) c.push('- 背景：' + o.context.background);
+      if (o.context.goal) c.push('- 目標：' + o.context.goal);
+      if (o.context.constraints) c.push('- 限制：\n' + o.context.constraints.map(function (x) { return '  - ' + x; }).join('\n'));
+      var body = '## Context\n' + c.join('\n');
+      if (o.context.data) body += (c.length ? '\n\n' : '') + '<document>\n' + o.context.data + '\n</document>';
+      s.push(body);
+    }
+    if (o.format) {
+      var f = [];
+      if (o.format.type) f.push('- 組織方式：' + o.format.type.join('、'));
+      if (o.format.length) f.push('- 長度：' + o.format.length);
+      s.push('## Format\n' + f.join('\n'));
+    }
+    if (o.depth) s.push('## Depth\n請分析到' + o.depth.join('、') + '層級。');
+    if (o.reasoning_mode) s.push('## Reasoning Mode\n' + o.reasoning_mode);
+    if (o.decision) s.push('## Decision\n請提供：\n' + o.decision.items.map(function (t, i) { return (i + 1) + '. ' + t; }).join('\n'));
+    if (o.stress_test) s.push('## Stress Test\n' + o.stress_test.questions.map(function (t) { return '- ' + t; }).join('\n'));
+    if (o.self_check) s.push('## Self-check\n輸出前請確認：\n' + o.self_check.items.map(function (t) { return '- ' + t; }).join('\n'));
+    return s.length ? s.join('\n\n') : '（在左側填入欄位，或載入一個範例）';
+  }
+
+  function render() {
+    $$('.seg button', form).forEach(function (b) { b.setAttribute('aria-pressed', String(Number(b.dataset.level) === state.level)); });
+    $$('fieldset[data-min-level]', form).forEach(function (fs) { fs.hidden = Number(fs.dataset.minLevel) > state.level; });
+    $$('.out-tabs button').forEach(function (b) {
+      var on = b.dataset.out === state.outMode;
+      b.classList.toggle('primary', on); b.setAttribute('aria-selected', String(on));
+    });
+    out.textContent = state.outMode === 'json' ? JSON.stringify(buildJSON(), null, 2) : buildMD();
+  }
+
+  function fillForm() {
+    $$('[data-k]', form).forEach(function (el) { el.value = state.f[el.dataset.k] || ''; });
+  }
+
+  $$('[data-k]', form).forEach(function (el) {
+    el.addEventListener('input', function () { state.f[el.dataset.k] = el.value; save(); render(); });
+  });
+  $$('.seg button', form).forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.level = Number(b.dataset.level);
+      if (state.level === 3) {
+        Object.keys(level3Defaults).forEach(function (k) { if (!v(k)) state.f[k] = level3Defaults[k]; });
+        fillForm();
+      }
+      save(); render();
+    });
+  });
+  $$('[data-preset]', form).forEach(function (b) {
+    b.addEventListener('click', function () {
+      var p = presets[b.dataset.preset];
+      if (p) { state.level = p.level; state.f = JSON.parse(JSON.stringify(p.f)); }
+      else { state.level = 1; state.f = {}; }
+      fillForm(); save(); render();
+    });
+  });
+  $$('.out-tabs button').forEach(function (b) {
+    b.addEventListener('click', function () { state.outMode = b.dataset.out; render(); });
+  });
+
+  var copiedTimer;
+  $('#copyBtn').addEventListener('click', function () {
+    var text = out.textContent;
+    function done() {
+      var c = $('#copied'); c.hidden = false;
+      clearTimeout(copiedTimer); copiedTimer = setTimeout(function () { c.hidden = true; }, 1500);
+    }
+    function fallback() {
+      var ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); done(); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fallback);
+    else fallback();
+  });
+
+  if (!load()) { state.level = presets.api.level; state.f = JSON.parse(JSON.stringify(presets.api.f)); }
+  fillForm(); render();
+})();
+</script>
+</body>
+</html>
