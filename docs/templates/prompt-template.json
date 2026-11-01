@@ -1,0 +1,43 @@
+{
+  "$comment": "Prompt Guide v3.0 統一模板。所有欄位皆為可選：Level 1 = role/task/context/format；Level 2 加 depth/reasoning_mode；Level 3 加 decision/stress_test/self_check。不需要的欄位直接刪除。",
+  "version": "3.0",
+  "role": ["【角色，例如：資深系統架構師】"],
+  "task": {
+    "items": ["【任務 1】", "【任務 2】"]
+  },
+  "context": {
+    "background": "【背景：目前情況、技術環境或市場環境】",
+    "goal": "【目標：要達成什麼、成功標準】",
+    "constraints": ["【限制與理由，例如：使用繁體中文，因為讀者在台灣】"],
+    "data": "【原始資料；組成 prompt 時以 <document> 標籤包住】"
+  },
+  "format": {
+    "type": ["條列", "表格", "Markdown"],
+    "length": "【長度，例如：500 字內】"
+  },
+  "depth": ["結構性分析"],
+  "reasoning_mode": "【Few-shot / Chain of Thought / First Principles / Scenario Simulation，可留空】",
+  "decision": {
+    "items": [
+      "可行方案（至少 2–3 種）",
+      "優缺點比較",
+      "風險評估",
+      "推薦方案與理由；資訊不足時說明還缺什麼",
+      "實作優先順序"
+    ]
+  },
+  "stress_test": {
+    "questions": [
+      "哪些假設可能錯誤？",
+      "最強的反對意見是什麼？",
+      "最壞情境是什麼？"
+    ]
+  },
+  "self_check": {
+    "items": [
+      "是否有推理跳躍？",
+      "關鍵主張是否有資料支持？",
+      "是否有更簡單的做法？"
+    ]
+  }
+}

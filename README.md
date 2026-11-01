@@ -1,628 +1,118 @@
-# 🧠 Prompt Guide v2.0  
-### Prompt Operating System — 控制思考，而不只是控制輸出
+# 🧠 Prompt Guide v3.0
+
+### 控制思考，而不只是控制輸出
+
+一套分層式的 Prompt 參考與最佳實踐。從日常的四行 prompt，到決策分析、AI 代理與團隊標準化，都用同一套結構。
 
 ---
 
-## 📌 版本資訊
+## ⚡ 30 秒快速開始
 
-**Prompt Guide v2.0**  
-設計定位：個人升級 → 團隊標準 → 企業級思考框架  
-核心理念：將 Prompt 工程升級為「思考作業系統」
-
----
-
-# 🎯 為什麼需要 v2.0？
-
-v1.0 解決的是：
-
-> 如何寫出高品質 Prompt？
-
-v2.0 解決的是：
-
-> 如何建立一套可擴展、可決策、可驗證的思考系統？
-
-當使用場景從個人進階到：
-
-- 架構設計
-- 商業決策
-- 團隊協作
-- 高風險分析
-
-單純的模組堆疊已不足夠。
-
-因此 v2.0 進行結構重構。
-
----
-
-# 🏗 Prompt Guide v2.0 整體架構
-
-- Level 1 — Core Prompt Layer
-- Level 2 — Advanced Control Layer
-- Level 3 — Decision & Validation Layer
-- Level 4 — Knowledge & Template System
-
-
-這是一個分層式 Prompt 系統。
-
----
-
-# 🟢 Level 1 — Core Prompt Layer（核心層）
-
-> 適用於 80% 日常任務
-
-## 🔑 核心公式
-
-> 有效輸出 = Persona × Task × Context × Format
-
----
-
-## 1️⃣ Persona（角色）
-
-定義思考身份與專業框架。
-
-- 資深架構師
-- 投資分析師
-- 產品經理
-- 初學者友善講師
-- 第一性原理思考者
-
-👉 控制的是「思考方式」。
-
----
-
-## 2️⃣ Task（任務）
-
-明確告訴 AI 要做什麼。
-
-- 分析
-- 設計
-- 重構
-- 比較
-- 規劃
-- 總結
-
-👉 控制的是「行為方向」。
-
----
-
-## 3️⃣ Context（情境）
-
-提供背景資訊以降低猜測誤差。
-
-- 文件
-- 程式碼
-- 市場資訊
-- 限制條件
-- 目標
-
-👉 控制的是「資訊完整度」。
-
----
-
-## 4️⃣ Format（格式）
-
-指定輸出形式。
-
-- 條列式
-- 表格
-- Markdown
-- JSON
-- 架構圖（文字描述）
-
-👉 控制的是「可用性」。
-
----
-
-# 🔵 Level 2 — Advanced Control Layer（進階控制層）
-
-> 適用於高價值決策與深度分析
-
----
-
-## 1️⃣ Depth（深度層級）
-
-指定分析深度：
-
-- 程式邏輯層
-- 架構層
-- 系統設計層
-- 第一性原理
-- 可擴展性分析
-- 技術債評估
-
-👉 控制的是「洞察深度」。
-
----
-
-## 2️⃣ Reasoning Mode（推理模式）
-
-- Few-shot（少樣本學習）
-- Chain of Thought（逐步推理）
-- First Principles（第一性原理）
-- Scenario Simulation（情境模擬）
-
-👉 控制的是「推理方式」。
-
----
-
-## 3️⃣ Constraint Control（限制控制）
-
-明確指出：
-
-- 效能限制
-- 安全性要求
-- 相容性
-- 禁用條件
-- 成本上限
-
-👉 控制的是「邊界條件」。
-
----
-
-# 🟣 Level 3 — Decision & Validation Layer（決策與驗證層）
-
-這是 v2.0 的核心升級。
-
-從「分析」升級為「決策閉環」。
-
----
-
-## 🎯 決策流程模型
-
-1. 問題定義
-
-2. 方案生成（至少 2–3 種）
-
-3. 優缺點比較
-
-4. 風險評估
-
-5. 推薦方案
-
-6. 實作優先順序
-
-7. 壓力測試
-
-8. 自我檢查
-
----
-
-## 🧪 壓力測試（Stress Test）
-
-挑戰輸出穩健性：
-
-- 若流量成長 10 倍？
-- 哪裡會成為效能瓶頸？
-- 哪些假設可能錯誤？
-- 最壞情境是什麼？
-
----
-
-## 🔍 自我檢查（Self-Check）
-
-品質驗證清單：
-
-- 是否存在架構風險？
-- 是否有安全漏洞？
-- 是否違反設計原則？
-- 是否可維護性不足？
-- 是否有更簡潔方式？
-
----
-
-# 🟡 Level 4 — Knowledge & Template System（模板與知識層）
-
-讓 Prompt 系統可規模化。
-
----
-
-## 1️⃣ 場景分類模板庫
-
-### 技術設計型
-- 架構設計模板
-- 重構建議模板
-- 技術選型分析模板
-
-### 商業決策型
-- 競爭分析模板
-- 投資評估模板
-- 風險矩陣模板
-
-### 教學講解型
-- 初學者友善講解模板
-- 分步驟推導模板
-
-### 批判辯證型
-- 反方挑戰模板
-- 假設驗證模板
-
----
-
-## 2️⃣ Output SLA（輸出品質標準）
-
-定義輸出必須達成：
-
-- 清晰度
-- 邏輯一致性
-- 可執行性
-- 風險揭露程度
-- 假設透明度
-
----
-
-# 🚀 使用流程（推薦工作流 + 實作範例）
-
-
-## 🧭 使用原則
-
-* 日常任務 → 只用 **Level 1**
-* 重要分析 → 加上 **Level 2**
-* 決策任務 → 啟用 **Level 3**
-* 團隊標準化 → 使用 **Level 4 模板**
-
-## Step 1 — 使用 Core Layer
-
-定義：
-
-- Persona
-- Task
-- Context
-- Format
-
-## Step 2 — 若為重要任務，啟用 Advanced Layer
-
-增加：
-
-- Depth
-- 推理模式
-- 限制條件
-
-
-## Step 3 — 啟用 Decision Layer
-
-產出：
-
-- 可行方案
-- 優缺點比較
-- 風險評估
-- 推薦與優先順序
-
-
-## Step 4 — 進行壓力測試與自我檢查
-
-確保穩健性與品質。
-
----
-
-## 🟢 範例一：日常任務（只用 Core Layer）
-
-### 🎯 情境
-
-我要重構一段程式碼。
-
----
-
-### Step 1 — 使用 Core Layer
+**有效輸出 = Persona × Task × Context × Format**
 
 ```markdown
-Persona：資深後端架構師
+Persona：你是一位【角色】，讀者是【對象】
+Task：請【動詞 + 具體目標】
+Context：背景【…】；目標【…】；限制【…，因為…】
+Format：【條列 / 表格 / Markdown】，【長度】
 
-Task：
-- 分析程式碼問題
-- 提出重構建議
-
-Context：
-- 使用 Java Spring Boot
-- 目前 Controller 過於肥大
-- 需要提升可維護性
-
-Format：
-- 條列式分析
-- 重構前後對照
+<document>
+（要處理的資料）
+</document>
 ```
 
----
-
-### 🔎 得到的效果
-
-* 清楚的問題拆解
-* SOLID 違反說明
-* 重構方向
-
-👉 不需要 Depth / Decision / Stress Test。
+這四項寫清楚，就能解決大多數日常任務。需要更深入時，再往下加層。
 
 ---
 
-## 🔵 範例二：架構設計（Core + Advanced）
+## 🏗 四層架構
 
-### 🎯 情境
+| 層級 | 模組 | 回答的問題 | 適用 |
+| --- | --- | --- | --- |
+| [**Level 1 核心層**](docs/01-core-ptcf.md) | Persona、Task、Context、Format | 做什麼？給誰？在什麼條件下？輸出什麼形式？ | 約 80% 日常任務 |
+| [**Level 2 進階控制層**](docs/02-advanced-control.md) | Depth、Reasoning Mode、Constraint | 想多深？怎麼想？邊界在哪？ | 深度分析、架構設計 |
+| [**Level 3 決策與驗證層**](docs/03-decision-validation.md) | Decision、Stress Test、Self-check | 所以該怎麼做？哪裡會崩？有沒有漏洞？ | 技術選型、投資判斷 |
+| [**Level 4 模板與知識層**](docs/04-template-system.md) | 模板庫、Output SLA | 如何每次都寫好、別人也能用？ | 團隊標準化 |
 
-我要設計一個高流量 API 架構。
+### 依任務價值選層
 
----
-
-### Step 1 — Core Layer
-
-```markdown
-Persona：資深系統架構師
-
-Task：
-- 設計高流量 API 架構
-- 提供可擴展方案
-
-Context：
-- 每日 100 萬請求
-- 部署於 Kubernetes
-- 使用 PostgreSQL
-
-Format：
-- 架構圖（文字描述）
-- 條列式說明
-```
-
----
-
-### Step 2 — 啟用 Advanced Layer
-
-```markdown
-Depth：
-- 系統設計層
-- 可擴展性分析
-
-Reasoning Mode：
-- 第一性原理拆解
-
-Constraint：
-- 成本需控制
-- 不能使用商業 DB
-```
-
----
-
-### 🔎 得到的效果
-
-* 負載拆解
-* 快取策略設計
-* 水平擴展方案
-* 可能瓶頸分析
-
-👉 這是「高價值分析」場景。
-
----
-
-## 🟣 範例三：技術選型決策（完整決策閉環）
-
-### 🎯 情境
-
-公司要從 SVN 轉 Git，需要決策。
-
----
-
-### Step 1 — Core + Advanced
-
-```markdown
-Persona：資深架構師 + 專案經理
-
-Task：
-- 提出版本控制升級方案
-
-Context：
-- 30 人團隊
-- 現在使用 SVN
-- 需導入 CI/CD
-
-Format：
-- 表格比較
-- 建議方案
-```
-
----
-
-### Step 2 — 啟用 Decision Layer
-
-```markdown
-請提供：
-- 可行方案（至少 3 種）
-- 優缺點比較
-- 風險評估
-- 推薦方案與理由
-- 實作優先順序
-```
-
----
-
-### Step 3 — 啟用 Stress Test
-
-```markdown
-- 若團隊不熟 Git 會發生什麼？
-- 哪裡可能成為技術債？
-- 最壞情境是什麼？
-```
-
----
-
-### 🔎 得到的效果
-
-* 不只是分析
-* 而是完整決策報告
-
-👉 這是「決策型任務」。
-
-### JSON格式
-
-```json
-{
-  "prompt_template": {
-    "role": {
-      "description": "角色 Persona",
-      "instruction": "你是一位【角色 Persona】",
-      "content": ["資深架構師", "專案經理"]
-    },
-    "task": {
-      "description": "任務",
-      "instruction": "請完成",
-      "items": [
-        "提出版本控制升級方案",
-        "完成決策閉環（方案比較、風險評估、推薦與壓力測試）"
-      ]
-    },
-    "context": {
-      "description": "情境",
-      "components": {
-        "background": {
-          "label": "背景",
-          "content": "公司目前使用 SVN，團隊規模 30 人"
-        },
-        "goal": {
-          "label": "目標",
-          "content": "導入 Git 並支援 CI/CD"
-        },
-        "constraints": {
-          "label": "限制",
-          "content": "禁用簡體字；需兼顧學習成本、工具整合、版本遷移風險"
-        },
-        "data": {
-          "label": "資料",
-          "content": "現有 SVN 儲存庫、CI/CD 需求、團隊技術能力"
-        }
-      }
-    },
-    "format": {
-      "description": "格式",
-      "instruction": "請用【條列 / 表格 / Markdown】輸出",
-      "options": ["條列", "表格", "Markdown"]
-    },
-    "depth": {
-      "description": "深度",
-      "instruction": "請用【第一性原理 / 系統思考 / 結構性分析】進行",
-      "methods": ["第一性原理", "系統思考", "結構性分析"]
-    },
-    "decision": {
-      "description": "決策",
-      "instruction": ["請提供可執行建議與優先順序", "優缺點比較","風險評估", "推薦方案與理由", "實作優先順序"]
-    },
-    "stress_test": {
-      "description": "壓力測試",
-      "instruction": "請指出可能盲點與反對觀點",
-      "blind_spots": [
-        "團隊不熟 Git，可能導致分支混亂、合併衝突頻繁",
-        "遷移過程若缺乏驗證，可能造成歷史版本遺失",
-        "哪裡可能成為技術債？",
-        "最壞情境是什麼？"
-      ]
-    },
-    "self_check": {
-      "description": "自我檢查",
-      "instruction": "請檢查是否存在推理漏洞與隱含假設"
-    }
-  }
-}
-```
-
----
-
-## 🟡 範例四：極簡任務（快速模式）
-
-### 🎯 情境
-
-幫我寫一段 LinkedIn 介紹。
-
----
-
-只需：
-
-```markdown
-Persona：品牌顧問
-Task：撰寫專業 LinkedIn 簡介
-Context：10 年後端經驗，擅長架構設計
-Format：150 字內，專業風格
-```
-
-👉 不要過度啟用模組。
-
----
-
-## 🧠 如何判斷啟用哪一層？
-
-| 任務價值  | 使用層級              |
-| ----- | ----------------- |
-| 低     | Level 1           |
-| 中     | Level 1 + Level 2 |
-| 高     | Level 1 + 2 + 3   |
-| 團隊標準化 | 全部                |
-
----
-
-## 🎯 一句話理解工作流
+| 任務價值 | 使用層級 | 例子 |
+| --- | --- | --- |
+| 低 | Level 1 | 寫一段自我介紹 |
+| 中 | Level 1 + 2 | 設計高流量 API 架構 |
+| 高 | Level 1 + 2 + 3 | SVN 轉 Git 的技術選型 |
+| 團隊標準化 | 全部 + [評估](docs/07-evaluation-iteration.md) | 共用模板、自動化流程 |
 
 ```
 小任務 → 用核心
 大任務 → 加深度
 決策任務 → 啟動閉環
-企業使用 → 標準化模板
+團隊使用 → 標準化模板 + 評估
 ```
 
 ---
 
-## 💡 關鍵提醒
+## 📚 文件導覽
 
-❌ 不要為了完整而完整
+### 分層指南
 
-❌ 不要每次都啟用全部模組
+1. [Level 1｜核心層：PTCF 四要素](docs/01-core-ptcf.md)
+2. [Level 2｜進階控制層：Depth、Reasoning Mode、Constraint](docs/02-advanced-control.md)
+3. [Level 3｜決策與驗證層：Decision、Stress Test、Self-check](docs/03-decision-validation.md)
+4. [Level 4｜模板與知識層：模板庫與 Output SLA](docs/04-template-system.md)
 
-✅ 根據任務價值啟用對應層級
+### 與時俱進
 
----
+5. [現代最佳實踐：推理模型、結構化與長文件](docs/05-modern-practices.md)
+6. [Agent 與 Context Engineering](docs/06-agent-context-engineering.md)
+7. [評估與迭代：Metrics Layer](docs/07-evaluation-iteration.md)
+8. [與 AI 協作開發流程](docs/08-ai-dev-workflow.md)
 
-# 📐 v2.0 設計優勢
+### 模板（可直接複製）
 
-| 面向 | v1.0 | v2.0 |
-|------|------|------|
-| 結構 | 模組平行 | 分層系統 |
-| 易用性 | 中 | 高 |
-| 可擴展性 | 中 | 高 |
-| 企業化潛力 | 低 | 高 |
-| 決策能力 | 有 | 強化 |
-
----
-
-# ⚠ 常見誤區
-
-❌ 模組越多越好  
-❌ 所有任務都需要完整流程  
-❌ 分析越深越有價值  
-
-正確做法：
-
-> 根據任務價值啟用對應層級。
+- [萬用模板](docs/templates/general.md)：極簡版、完整版、JSON 版
+- [程式與專案模板](docs/templates/programming.md)：專案掃描、架構設計、重構
+- [投資分析模板](docs/templates/investment.md)：分析類 prompt 寫法示範
+- [prompt-template.json](docs/templates/prompt-template.json)：統一 JSON 結構
 
 ---
 
-# 🏁 核心原則
+## ⚠ 常見誤區
 
-✅ 控制思考，而不只是控制輸出  
-✅ 用結構降低不確定性  
-✅ 用決策閉環避免空洞分析  
-✅ 用壓力測試確保穩健性  
-✅ 用模板系統提升可重複性  
-
----
-
-# 🧩 未來升級方向
-
-- v2.1：加入 Metrics Layer（量化評估）
-- v2.2：加入 AI Workflow Automation
-- v3.0：企業導入標準版
+| 誤區 | 正確做法 |
+| --- | --- |
+| 模組越多越好 | 依任務價值啟用對應層級 |
+| 每次都寫「請逐步思考」 | 推理模型會自己思考；說清楚目標與理由更有效 |
+| 用「嚴禁」「絕對」加強語氣 | 一般語氣 + 說明原因 |
+| 只給 Persona 不給資料 | Context 才是降低幻覺的關鍵 |
+| 一個 prompt 做所有事 | 拆成多步驟（Prompt Chaining） |
+| 看一次結果就定案 | 用固定測試案例比較版本 |
 
 ---
 
-# 💬 最終核心觀念
+## 🏁 核心原則
 
-> Prompt 不只是提問。  
-> 它是一套思考架構。  
-> 當你控制輸入結構，你就控制了輸出品質。  
-> 當你控制思考流程，你就控制了決策結果。
+- ✅ 控制思考，而不只是控制輸出
+- ✅ 用結構降低不確定性
+- ✅ 說明理由，而不是加重語氣
+- ✅ 用決策閉環避免空洞分析
+- ✅ 用壓力測試確保穩健性
+- ✅ 用測試案例驗證 prompt，而不是憑感覺
 
 ---
 
-**Prompt Guide v2.0 — 你的思考作業系統。**
+## 🔗 舊網址對照（v2.0 → v3.0）
+
+| 舊文件 | 新位置 |
+| --- | --- |
+| `docs/PTCF.md` | [docs/01-core-ptcf.md](docs/01-core-ptcf.md) |
+| `docs/prompt-eng-guide-personal.md` | [docs/02-advanced-control.md](docs/02-advanced-control.md)、[docs/03-decision-validation.md](docs/03-decision-validation.md) |
+| `docs/few-shot-cot-golden-template.md` | [docs/templates/general.md](docs/templates/general.md)、[docs/templates/programming.md](docs/templates/programming.md)、[docs/templates/investment.md](docs/templates/investment.md) |
+| `docs/prog-pm-context.md` | [docs/templates/programming.md](docs/templates/programming.md) |
+
+版本演進見 [CHANGELOG](CHANGELOG.md)。
+
+---
+
+> Prompt 不只是提問，而是一套思考架構。
+> 控制輸入結構，就能控制輸出品質；控制思考流程，就能控制決策結果。
