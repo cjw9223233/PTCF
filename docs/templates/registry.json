@@ -18,13 +18,13 @@
       "id": "programming",
       "title": "程式與專案模板",
       "file": "docs/templates/programming.md",
-      "version": "3.0.0",
+      "version": "4.0.0",
       "status": "已發布",
       "owner": "本 repo 維護者",
       "levels": [1, 2, 3],
-      "sla": ["邏輯一致性", "可執行性", "風險揭露"],
+      "sla": ["邏輯一致性", "可執行性", "風險揭露", "假設透明度", "安全與隱私"],
       "evals": "evals/programming/cases.json",
-      "verified": { "date": "2026-11", "models": [], "method": "以重構實例人工檢查輸出結構；尚未以模型實跑測試案例" },
+      "verified": { "date": "2026-11", "models": [], "method": "改為共同骨架＋六個子模板；以重構與除錯實例人工檢查輸出結構；尚未以模型實跑測試案例" },
       "replaced_by": null
     },
     {

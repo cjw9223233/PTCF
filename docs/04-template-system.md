@@ -11,7 +11,7 @@ Level 1–3 解決「單次 prompt 寫得好」；Level 4 解決「每次都寫�
 | 模板 | 層級 | 適用 |
 | --- | --- | --- |
 | [萬用模板](templates/general.md) | 1–3 | 任何任務；含極簡版、完整版、JSON 版 |
-| [程式與專案模板](templates/programming.md) | 1–3 | 專案掃描、架構設計、重構、技術選型 |
+| [程式與專案模板](templates/programming.md) | 1–3 | 共同骨架＋六個子模板：專案掃描、除錯、程式碼審查、重構、架構與技術選型、寫測試 |
 | [投資分析模板](templates/investment.md) | 1–3 | 分析類 prompt 寫法示範（非投資建議） |
 | [Agent 任務模板](templates/agent-task.md) | 1、3 | 交給 AI 代理執行的開發或自動化任務 |
 | [摘要與文件審閱模板](templates/summary-review.md) | 1–2 | 會議紀錄、報告、合約等長文件的摘要與審閱 |
