@@ -1,7 +1,7 @@
 {
   "$comment": "Agent 任務模板的測試案例。評估對象是代理收到任務後的第一個回覆（計畫或停止回報），不是實際修改程式。資料皆為虛構。",
   "template": "agent-task",
-  "template_version": "2.0.0",
+  "template_version": "2.0.1",
   "cases": [
     {
       "id": "agent-task-plan",
