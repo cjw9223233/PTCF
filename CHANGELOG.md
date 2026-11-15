@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## v3.4（2026-11）
+
+- 新增評估執行器 `scripts/run_evals.py`：讀取測試案例、依 schema 組成 prompt、呼叫模型、以 `must_include`／`must_not` 規則檢查，可選擇以 LLM-as-judge 依 `rubric` 評分；結果寫入 `evals/<id>/results/`。只在本機手動執行，不進 CI。
+- `verified.models` 改為只能由實跑結果更新；`validate.py` 新增檢查，列出的模型必須有該版本全數通過的實跑紀錄。
+- [Agent 與 Context Engineering](docs/06-agent-context-engineering.md) 新增四節：子代理與脈絡隔離、Skills 與漸進式揭露、MCP、代理的 prompt injection 風險（致命三要素）；護欄順延為第 9 節。
+- 04 生命週期與 07 評估流程補充執行器用法；04 發布到工具連到 06。
+- 網站設定 `lang: zh-Hant-TW`。
+- README 標題不再寫死版本號、教學時間改為約 25 分鐘、舊網址對照移到本檔 v3.0 條目；教學頁同步。
+
 ## v3.3.1（2026-11）
 
 - Agent 任務模板 2.0.1：第 3 節補充子模板的三步用法、修 bug 合併範例與前後差異，以及新功能、重構、相依套件升級的範例。
@@ -41,7 +50,16 @@
 - 統一 JSON 結構為 [prompt-template.json](docs/templates/prompt-template.json)，所有範例都採用同一組欄位。
 - 移除文件中的 AI 對話殘留語句，改為中性的參考文件語氣；修正錯字。
 - 投資模板加上免責聲明，範例數據改為虛構示意。
-- README 改為首頁與導覽，附上舊網址對照。
+- README 改為首頁與導覽。
+
+**舊網址對照（v2.0 → v3.0）**
+
+| 舊文件 | 新位置 |
+| --- | --- |
+| `docs/PTCF.md` | [docs/01-core-ptcf.md](docs/01-core-ptcf.md) |
+| `docs/prompt-eng-guide-personal.md` | [docs/02-advanced-control.md](docs/02-advanced-control.md)、[docs/03-decision-validation.md](docs/03-decision-validation.md) |
+| `docs/few-shot-cot-golden-template.md` | [docs/templates/general.md](docs/templates/general.md)、[docs/templates/programming.md](docs/templates/programming.md)、[docs/templates/investment.md](docs/templates/investment.md) |
+| `docs/prog-pm-context.md` | [docs/templates/programming.md](docs/templates/programming.md) |
 
 **新增內容**（涵蓋原規劃的 v2.1 Metrics Layer 與 v2.2 AI Workflow Automation）
 

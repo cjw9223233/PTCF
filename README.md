@@ -1,10 +1,10 @@
-# 🧠 Prompt Guide v3.0
+# 🧠 Prompt Guide
 
 ### 控制思考，而不只是控制輸出
 
 一套分層式的 Prompt 參考與最佳實踐。從日常的四行 prompt，到決策分析、AI 代理與團隊標準化，都用同一套結構。
 
-> 👉 **第一次來？** 先看 [互動式教學](tutorial/)：30 分鐘走完四層架構，附選層測驗與 Prompt 產生器。
+> 👉 **第一次來？** 先看 [互動式教學](tutorial/)：約 25 分鐘走完四層架構，附選層測驗與 Prompt 產生器。
 
 ---
 
@@ -70,7 +70,7 @@ Format：【條列 / 表格 / Markdown】，【長度】
 ### 與時俱進
 
 5. [現代最佳實踐：推理模型、結構化與長文件](docs/05-modern-practices.md)
-6. [Agent 與 Context Engineering](docs/06-agent-context-engineering.md)
+6. [Agent 與 Context Engineering：子代理、Skills、MCP 與 prompt injection](docs/06-agent-context-engineering.md)
 7. [評估與迭代：Metrics Layer](docs/07-evaluation-iteration.md)
 8. [與 AI 協作開發流程](docs/08-ai-dev-workflow.md)
 
@@ -78,9 +78,9 @@ Format：【條列 / 表格 / Markdown】，【長度】
 
 - [萬用模板](docs/templates/general.md)：極簡版、完整版、JSON 版
 - [程式與專案模板](docs/templates/programming.md)：專案掃描、除錯、程式碼審查、重構、架構設計、寫測試
-- [投資分析模板](docs/templates/investment.md)：分析類 prompt 寫法示範
+- [投資分析模板](docs/templates/investment.md)：分析類 prompt 寫法示範（非投資建議）
 - [Agent 任務模板](docs/templates/agent-task.md)：交給 AI 代理執行的開發與自動化任務，含自主程度、驗證指令、權限與停止條件
-- [摘要與文件審閱模板](docs/templates/summary-review.md)：會議紀錄、報告等長文件的摘要與審閱
+- [摘要與文件審閱模板](docs/templates/summary-review.md)：會議紀錄、報告、合約等長文件的摘要與審閱
 - [prompt-template.json](docs/templates/prompt-template.json)：統一 JSON 結構
 
 ---
@@ -109,16 +109,9 @@ Format：【條列 / 表格 / Markdown】，【長度】
 
 ---
 
-## 🔗 舊網址對照（v2.0 → v3.0）
+## 🔗 版本
 
-| 舊文件 | 新位置 |
-| --- | --- |
-| `docs/PTCF.md` | [docs/01-core-ptcf.md](docs/01-core-ptcf.md) |
-| `docs/prompt-eng-guide-personal.md` | [docs/02-advanced-control.md](docs/02-advanced-control.md)、[docs/03-decision-validation.md](docs/03-decision-validation.md) |
-| `docs/few-shot-cot-golden-template.md` | [docs/templates/general.md](docs/templates/general.md)、[docs/templates/programming.md](docs/templates/programming.md)、[docs/templates/investment.md](docs/templates/investment.md) |
-| `docs/prog-pm-context.md` | [docs/templates/programming.md](docs/templates/programming.md) |
-
-版本演進見 [CHANGELOG](CHANGELOG.md)。
+目前版本、版本演進與 v2.0 舊網址對照見 [CHANGELOG](CHANGELOG.md)。
 
 ---
 

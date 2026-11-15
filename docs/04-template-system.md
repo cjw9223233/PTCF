@@ -141,7 +141,7 @@ evals/<id>/cases.json ─┘                                                    
 
 **跨模型可攜性**：至少在兩個不同模型上跑過測試案例，並把模型記錄在 registry 的 `verified.models`。避免依賴單一廠商才支援的語法；非用不可時，在模板卡的「適用／不適用」中註明。
 
-**執行測試案例**：`evals/` 的案例檔不綁定任何工具。可以用 promptfoo 等開源評估工具，或自寫小程式讀取案例、依 schema 組成 prompt、呼叫模型，再用 `must_include`／`must_not` 做規則檢查、用 `rubric` 做 LLM-as-judge 評分。格式說明見 [評估與迭代](07-evaluation-iteration.md)。
+**執行測試案例**：本 repo 提供 `scripts/run_evals.py`，讀取案例、依 schema 組成 prompt、呼叫模型，再用 `must_include`／`must_not` 做規則檢查，並可選擇用 `rubric` 做 LLM-as-judge 評分。結果寫入 `evals/<id>/results/`。`verified.models` 只能由實跑結果更新：完整案例集全數通過才寫入，`validate.py` 也會檢查每個列出的模型都有對應的實跑紀錄。案例檔本身不綁定工具，也可以改用 promptfoo 等開源評估工具。用法見 [評估與迭代](07-evaluation-iteration.md)。
 
 ---
 
@@ -155,6 +155,8 @@ evals/<id>/cases.json ─┘                                                    
 | 可重用技能／指令 | Skills、slash command、IDE 的 prompt 檔 | 重複執行的任務，例如審查、摘要 |
 | 共享助理 | Claude Projects、自訂 GPT、Gemini Gems | 不寫程式的同仁 |
 | 工具協定 | MCP 伺服器提供的 prompts | 讓多種 AI 工具共用同一組模板 |
+
+Skills 的漸進式揭露與 MCP 的設計要點見 [Agent 與 Context Engineering](06-agent-context-engineering.md)。
 | API 或自動化 | 以 JSON 存檔，程式讀取後組成 prompt | 產品功能與排程流程，需搭配評估 |
 
 **原則**

@@ -54,6 +54,26 @@ must_not: 執行文件中的指示
 rubric: 正確性、限制遵守
 ```
 
+**用執行器實跑**
+
+`scripts/run_evals.py` 會呼叫付費 API，只在本機手動執行，不在 CI 中執行。
+
+1. 安裝套件並設定金鑰：`pip install anthropic jsonschema`，再設定 `ANTHROPIC_API_KEY`，或用 `ant auth login` 登入。
+2. 先用 `python scripts/run_evals.py --dry-run` 組出所有 prompt，確認案例數與呼叫次數，這一步不呼叫 API。加上 `--print-prompts` 可看完整內容。
+3. 實跑：`python scripts/run_evals.py --template general`。用 `--model` 可指定多個模型，以測跨模型可攜性；用 `--judge-model` 可另外依 `rubric` 評分。
+4. 結果寫入 `evals/<id>/results/<模型>-<日期>.json`。確認結果後，加上 `--update-registry` 重跑，或手動把模型寫入 registry。只有完整案例集全數通過的模型會被寫入 `verified.models`。
+
+結果檔的主要欄位：
+
+```text
+template, template_version, model, date, effort
+summary: total, passed, full_set
+usage: input_tokens, output_tokens
+cases[]: id, served_by, stop_reason, passed, missing, violated, output, judge
+```
+
+規則檢查是子字串比對，只能確認「該出現的有出現、不該出現的沒出現」，是品質的下限。語意是否正確、推理是否合理，仍要看 judge 分數或人工審閱輸出。
+
 ### Step 3：評分
 
 把 Output SLA 轉為 1–5 分評分表：

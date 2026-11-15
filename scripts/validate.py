@@ -99,6 +99,18 @@ for t in registry["templates"]:
         fail(md, f"模板卡狀態 {card.get('狀態')} 與 registry {t['status']} 不一致")
     if t["status"] == "已停用" and not t.get("replaced_by"):
         fail(registry_path, f"{tid} 已停用但沒有 replaced_by")
+    # verified.models must be backed by a full, passing run of the current version
+    for model in t.get("verified", {}).get("models", []):
+        backed = False
+        for rp in sorted((ROOT / "evals" / tid / "results").glob(f"{model}-*.json")):
+            r = load_json(rp) or {}
+            s = r.get("summary", {})
+            if (r.get("model") == model and r.get("template_version") == t["version"]
+                    and s.get("full_set") and s.get("total") and s.get("passed") == s.get("total")):
+                backed = True
+                break
+        if not backed:
+            fail(registry_path, f"{tid} 的 verified.models 列出 {model}，但 evals/{tid}/results/ 沒有版本 {t['version']} 全數通過的實跑紀錄")
     if t["status"] != "已發布":
         continue
     evals_path = ROOT / (t.get("evals") or "")

@@ -1,5 +1,6 @@
 theme: jekyll-theme-minimal
 title: PTCF Prompt Guide
+lang: zh-Hant-TW
 description: Prompt 參考與最佳實踐：用 Persona × Task × Context × Format 建立可擴展、可決策、可驗證的思考系統
 exclude:
   - CLAUDE.md
