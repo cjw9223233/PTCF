@@ -5,6 +5,7 @@
 一套分層式的 Prompt 參考與最佳實踐。從日常的四行 prompt，到決策分析、AI 代理與團隊標準化，都用同一套結構。
 
 > 👉 **第一次來？** 先看 [互動式教學](tutorial/)：約 25 分鐘走完四層架構，附選層測驗與 Prompt 產生器。
+[互動式教學網頁](https://cjw9223233.github.io/PTCF/tutorial/#start)
 
 ---
 
